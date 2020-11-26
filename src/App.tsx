@@ -3,7 +3,7 @@ import {AllBoards} from './screens/AllBoards/AllBoards';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Title} from './common-components/Title';
-import {PlusButton} from './common-components/AddButton';
+import {PlusButton} from './common-components/PlusButton';
 
 const Stack = createStackNavigator();
 
@@ -15,7 +15,7 @@ export const App = () => {
           name="MyDesc"
           options={{
             headerStyle: {
-              borderWidth: 1,
+              borderBottomWidth: 1,
               elevation: 0, // remove shadow on Android
               shadowOpacity: 0, // remove shadow on iOS
               height: 64,

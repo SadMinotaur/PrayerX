@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  text: {
+  plus: {
     padding: 15,
     fontSize: 17,
     lineHeight: 20,
