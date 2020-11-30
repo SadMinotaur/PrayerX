@@ -18,7 +18,7 @@ export const App = () => {
           options={{
             headerStyle: {
               borderBottomWidth: 1,
-              elevation: 0, // remove shadow on Android
+              elevation: 0,
               height: 64,
             },
             headerRight: () => <PlusButton />,

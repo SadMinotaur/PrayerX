@@ -6,6 +6,6 @@ interface TitleProps {
   name: string;
 }
 
-export const Title: React.FC<TitleProps> = (props) => {
-  return <Text style={styles.text}>{props.name}</Text>;
+export const Title: React.FC<TitleProps> = ({name}) => {
+  return <Text style={styles.text}>{name}</Text>;
 };

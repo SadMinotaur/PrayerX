@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
-import {Boards} from '../../components/Boards';
+import {Boards} from '../../components/BoardName';
 import {styles} from './styles';
 
 export const AllBoards: React.FC = () => {
