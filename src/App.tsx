@@ -12,7 +12,7 @@ const Stack = createStackNavigator();
 export const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="TODO">
+      <Stack.Navigator initialRouteName="MyDesc">
         <Stack.Screen
           name="MyDesc"
           options={{
