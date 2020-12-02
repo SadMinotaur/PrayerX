@@ -1,17 +1,18 @@
-import {UserStore} from './user/userTypes';
+import {LoginActionRequestPd} from './user/userActions';
 
 const urlBase = 'https://trello-purrweb.herokuapp.com/';
 
 export const Api = {
-  userReg: fetch('https://trello-purrweb.herokuapp.com/' + 'auth/sign-up', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: {
-      name: 'test',
-      email: 'test',
-      password: 'test',
-    } as UserStore,
-  }),
+  userLogin: async (user: LoginActionRequestPd) =>
+    fetch(urlBase + 'auth/sign-in', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: {
+        email: user.email,
+        password: user.password,
+      },
+    }).then((resp) => resp.json()),
 };

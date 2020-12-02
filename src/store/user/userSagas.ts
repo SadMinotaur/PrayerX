@@ -1,29 +1,20 @@
-import {Alert} from 'react-native';
-import {add} from 'react-native-reanimated';
-import {all, call, put, takeEvery} from 'redux-saga/effects';
+import {call, put, takeEvery} from 'redux-saga/effects';
 import {Api} from '../Api';
-import {regAction} from './userActions';
+import {
+  loginActionFailure,
+  loginActionRequest,
+  loginActionSuccess,
+} from './userActions';
 
-export function* rootSaga() {
-  yield all([watchOnReg()]);
+export default function* watchOnReg() {
+  yield takeEvery(loginActionRequest, loginUserFunction);
 }
 
-export function* watchOnReg() {
-  yield takeEvery(regAction, regUserFunction);
-}
-
-function* regUserFunction() {
+function* loginUserFunction(payload: any) {
   try {
-    yield fetch('https://trello-purrweb.herokuapp.com/', {
-      method: 'GET',
-    })
-      .then((r) => {
-        Alert.alert(r.json.toString());
-      })
-      .catch((er) => {
-        Alert.alert(er.toString());
-      });
-  } catch (error) {
-    console.log('some error');
+    const json = yield call(Api.userLogin, payload);
+    put({type: loginActionSuccess.type, payload: json});
+  } catch (e) {
+    put({type: loginActionFailure.type, payload: e.toString()});
   }
 }

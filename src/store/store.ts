@@ -1,10 +1,10 @@
 import {applyMiddleware, combineReducers, createStore} from '@reduxjs/toolkit';
-import logger from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
 import {persistStore, persistReducer} from 'redux-persist';
 import createSagaMiddleware, {SagaMiddleware} from 'redux-saga';
-import {userReducer} from './user/userSlice';
-import {rootSaga, watchOnReg} from './user/userSagas';
+import {userReducer} from './user/userRedusers';
+import {rootSaga} from './rootSaga';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const reducers = combineReducers({user: userReducer});
 export type RootState = ReturnType<typeof reducers>;
@@ -12,7 +12,7 @@ export type RootState = ReturnType<typeof reducers>;
 const persistedReducer = persistReducer(
   {
     key: 'root',
-    storage: storage,
+    storage: AsyncStorage,
   },
   reducers,
 );
@@ -22,7 +22,7 @@ export const store = createStore(
   persistedReducer,
   applyMiddleware(sagaMiddleware),
 );
+persistStore(store);
 export type StoreDispatchType = typeof store.dispatch;
 
-// persistStore(store);
 sagaMiddleware.run(rootSaga);

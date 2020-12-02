@@ -1,7 +1,7 @@
 import React from 'react';
-import {Alert, Text} from 'react-native';
+import {Text} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {regAction} from '../../store/user/userActions';
+import {loginActionRequest} from '../../store/user/userActions';
 import {styles} from './styles';
 
 interface TitleProps {
@@ -10,6 +10,6 @@ interface TitleProps {
 
 export const Title: React.FC<TitleProps> = ({name}) => {
   const dispatch = useDispatch();
-  dispatch({type: 'REG_USER', payload: 'test'});
+  dispatch(loginActionRequest({email: '', password: ''}));
   return <Text style={styles.text}>{name}</Text>;
 };

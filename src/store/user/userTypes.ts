@@ -1,5 +1,6 @@
 export interface UserStore {
-  name: string;
+  id: number;
   email: string;
-  password: string;
+  name: string;
+  token: string;
 }
