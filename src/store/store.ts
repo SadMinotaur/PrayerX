@@ -1,22 +1,28 @@
-import {applyMiddleware, createStore} from '@reduxjs/toolkit';
+import {applyMiddleware, combineReducers, createStore} from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
 import {persistStore, persistReducer} from 'redux-persist';
-import createSagaMiddleware from 'redux-saga';
+import createSagaMiddleware, {SagaMiddleware} from 'redux-saga';
+import {userReducer} from './user/userSlice';
+import {rootSaga, watchOnReg} from './user/userSagas';
 
-const sagaMiddleware = createSagaMiddleware();
+const reducers = combineReducers({user: userReducer});
+export type RootState = ReturnType<typeof reducers>;
 
 const persistedReducer = persistReducer(
   {
     key: 'root',
     storage: storage,
   },
-  () => {},
+  reducers,
 );
 
+const sagaMiddleware: SagaMiddleware = createSagaMiddleware();
 export const store = createStore(
   persistedReducer,
-  applyMiddleware(logger, sagaMiddleware),
+  applyMiddleware(sagaMiddleware),
 );
-export const persistor = persistStore(store);
 export type StoreDispatchType = typeof store.dispatch;
+
+// persistStore(store);
+sagaMiddleware.run(rootSaga);

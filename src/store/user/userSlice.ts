@@ -1,9 +1,12 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createReducer} from '@reduxjs/toolkit';
+import {loginAction, regAction} from './userActions';
+import {UserStore} from './userTypes';
 
-export const popupSlice = createSlice({
-  name: 'user',
-  initialState: -1,
-  reducers: {
-    changePopup: (state, action: PayloadAction<number>) => action.payload,
+export const userReducer = createReducer(
+  {name: '', email: '', password: ''} as UserStore,
+  (builder) => {
+    builder
+      .addCase(loginAction, (state, action) => state)
+      .addCase(regAction, (state, action) => state);
   },
-});
+);
