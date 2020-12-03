@@ -1,8 +1,10 @@
+import {PayloadAction} from '@reduxjs/toolkit';
 import {call, put, takeEvery} from 'redux-saga/effects';
 import {Api} from '../Api';
 import {
   loginActionFailure,
   loginActionRequest,
+  LoginActionRequestPd,
   loginActionSuccess,
 } from './userActions';
 
@@ -10,7 +12,7 @@ export default function* watchOnReg() {
   yield takeEvery(loginActionRequest, loginUserFunction);
 }
 
-function* loginUserFunction(payload: any) {
+function* loginUserFunction(payload: PayloadAction<LoginActionRequestPd>) {
   try {
     const json = yield call(Api.userLogin, payload);
     put({type: loginActionSuccess.type, payload: json});

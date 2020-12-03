@@ -1,9 +1,10 @@
+import {PayloadAction} from '@reduxjs/toolkit';
 import {LoginActionRequestPd} from './user/userActions';
 
 const urlBase = 'https://trello-purrweb.herokuapp.com/';
 
 export const Api = {
-  userLogin: async (user: LoginActionRequestPd) =>
+  userLogin: async (user: PayloadAction<LoginActionRequestPd>) =>
     fetch(urlBase + 'auth/sign-in', {
       method: 'POST',
       headers: {
@@ -11,8 +12,8 @@ export const Api = {
         'Content-Type': 'application/json',
       },
       body: {
-        email: user.email,
-        password: user.password,
+        email: user.payload.email,
+        password: user.payload.password,
       },
     }).then((resp) => resp.json()),
 };
