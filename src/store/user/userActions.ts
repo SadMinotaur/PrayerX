@@ -29,10 +29,17 @@ export interface RegActionPd {
   password: string;
 }
 export const regAction = createAction<RegActionPd>('REG_USER_REQUEST');
-export const regActionSuccess = createAction<{}>('LOGIN_USER_SUCCESS');
-export interface regActionFailurePd {
+export interface RegActionSuccessPd {
+  email: string;
+  name: string;
+  password: string;
+}
+export const regActionSuccess = createAction<RegActionSuccessPd>(
+  'REG_USER_SUCCESS',
+);
+export interface RegActionFailurePd {
   error: string;
 }
-export const regActionFailure = createAction<regActionFailurePd>(
-  'LOGIN_USER_FAILURE',
+export const regActionFailure = createAction<RegActionFailurePd>(
+  'REG_USER_FAILURE',
 );

@@ -1,6 +1,8 @@
 import {PayloadAction} from '@reduxjs/toolkit';
+import {Alert} from 'react-native';
 import {call, put, takeEvery} from 'redux-saga/effects';
-import {Api} from '../Api';
+import {AuthSignInSDto} from '../../dto/auth/AuthSignInSDto';
+import Api from '../Api';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -8,15 +10,20 @@ import {
   loginActionSuccess,
 } from './userActions';
 
-export default function* watchOnReg() {
-  yield takeEvery(loginActionRequest, loginUserFunction);
+export default function* watchOnAuth() {
+  yield takeEvery(loginActionRequest, loginUserSaga);
 }
 
-function* loginUserFunction(payload: PayloadAction<LoginActionRequestPd>) {
+function* loginUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
   try {
-    const json = yield call(Api.userLogin, payload);
-    put({type: loginActionSuccess.type, payload: json});
+    const {email, password} = payloadAction.payload;
+    const json: AuthSignInSDto = yield call(Api.signIn, {
+      email: email,
+      password: password,
+    });
+    put(loginActionSuccess(json));
   } catch (e) {
-    put({type: loginActionFailure.type, payload: e.toString()});
+    put(loginActionFailure(e.toString()));
+    Alert.alert('Something went wrong!');
   }
 }

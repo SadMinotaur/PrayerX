@@ -1,6 +1,6 @@
 import {all} from 'redux-saga/effects';
-import watchOnReg from './user/userSagas';
+import watchOnAuth from './user/userSagas';
 
 export function* rootSaga() {
-  yield all([watchOnReg()]);
+  yield all([watchOnAuth()]);
 }
