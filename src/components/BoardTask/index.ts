@@ -1,1 +1,1 @@
-export {BoardTask as Boards} from './BoardTask';
+export {BoardTask} from './BoardTask';

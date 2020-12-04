@@ -1,1 +1,1 @@
-export {App} from './AllBoards';
+export {AllBoards} from './AllBoards';

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {PlusButton} from '../../common-components/PlusButton';
+import {PlusButton} from '../../components/PlusButton';
 import {styles} from './styles';
 
 export const Board: React.FC = () => {

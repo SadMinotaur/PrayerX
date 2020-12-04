@@ -1,22 +1,22 @@
-import {Alert} from 'react-native';
-import {AuthSignUpDto} from '../dto/auth/AuthSignUpDto';
-import {AuthSignInDto} from '../dto/auth/AuthSingInDto';
-import {LoginUserSuccessPd, RegActionSuccessPd} from './user/userActions';
+import {
+  AuthSignUpReqDto,
+  AuthSignUpSuccessDto,
+} from '../dto/auth/AuthSignUpDtos';
+import {
+  AuthSignInReqDto,
+  AuthSignInSuccessDto,
+} from '../dto/auth/AuthSingInDtos';
 
 class Api {
-  urlBase: string;
-  token: string = '';
+  #urlBase: string = '';
+  #token: string = '';
 
   constructor(baseUrl: string) {
-    if (baseUrl === '') {
-      Alert.alert('Wrong url');
-      // TODO: do something
-    }
-    this.urlBase = baseUrl;
+    this.#urlBase = baseUrl;
   }
 
-  async signIn(user: AuthSignInDto) {
-    fetch(this.urlBase + 'auth/sign-in', {
+  async signIn(user: AuthSignInReqDto) {
+    return fetch(this.#urlBase + 'auth/sign-in', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -25,26 +25,27 @@ class Api {
       body: user,
     })
       .then((resp) => resp.json())
-      .then((json: LoginUserSuccessPd) => {
-        this.token = json.token;
+      .then((json: AuthSignInSuccessDto) => {
+        this.#token = json.token;
         return json;
       });
   }
 
-  async singUp(user: AuthSignUpDto) {
-    // fetch(this.urlBase + 'auth/sign-up', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: user,
-    // })
-    //   .then((resp) => resp.json())
-    //   .then((json: RegActionSuccessPd) => {
-    //     return json;
-    //   });
+  async singUp(user: AuthSignUpReqDto) {
+    return fetch(this.#urlBase + 'auth/sign-up', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: user,
+    })
+      .then((resp) => resp.json())
+      .then((json: AuthSignUpSuccessDto) => {
+        this.#token = json.token;
+        return json;
+      });
   }
 }
 
-export default new Api('https://trello-purrweb.herokuapp.com/');
+export const API: Api = new Api('https://trello-purrweb.herokuapp.com/');

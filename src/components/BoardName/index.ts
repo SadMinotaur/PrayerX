@@ -1,1 +1,1 @@
-export {BoardName as Boards} from './Boards';
+export {BoardName} from './BoardName';
