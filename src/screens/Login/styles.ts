@@ -4,12 +4,12 @@ export const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
   },
   textInput: {
+    margin: 10,
     borderWidth: 1,
-    width: 300,
     borderRadius: 6,
+    borderColor: '#E5E5E5',
   },
   inputBorder: {
     margin: 20,

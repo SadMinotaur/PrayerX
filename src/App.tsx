@@ -16,7 +16,10 @@ export const App = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName={
+            store.getState().user.token === '' ? 'Login' : 'MyDesc'
+          }>
           <Stack.Screen
             name="Login"
             options={{

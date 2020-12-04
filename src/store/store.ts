@@ -21,7 +21,7 @@ const persistedReducer = persistReducer(
 const sagaMiddleware: SagaMiddleware = createSagaMiddleware();
 export const store = createStore(
   persistedReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware)),
+  composeWithDevTools(applyMiddleware(sagaMiddleware, logger)),
 );
 persistStore(store);
 export type StoreDispatchType = typeof store.dispatch;
