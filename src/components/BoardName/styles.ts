@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  text: {
+  boardBorder: {
     width: 345,
+    height: 59,
     marginBottom: 10,
     borderWidth: 1,
     borderStyle: 'solid',
@@ -11,6 +12,8 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingLeft: 15,
     borderRadius: 4,
+  },
+  boardText: {
     fontSize: 17,
     lineHeight: 20,
     color: '#514D47',

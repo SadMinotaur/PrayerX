@@ -4,8 +4,13 @@ import {styles} from './styles';
 
 interface TitleProps {
   name: string;
+  moved?: boolean;
 }
 
-export const Title: React.FC<TitleProps> = (props) => {
-  return <Text style={styles.text}>{props.name}</Text>;
-};
+export const Title: React.FC<TitleProps> = ({name, moved: movedRight}) => (
+  <>
+    <Text style={[styles.text, !movedRight ? {marginLeft: 0} : {}]}>
+      {name}
+    </Text>
+  </>
+);
