@@ -6,8 +6,9 @@ import {rootSaga} from './rootSaga';
 import AsyncStorage from '@react-native-community/async-storage';
 import logger from 'redux-logger';
 import {composeWithDevTools} from 'redux-devtools-extension';
+import {columnsReducer} from './columns/columnReducers';
 
-const reducers = combineReducers({user: userReducer});
+const reducers = combineReducers({user: userReducer, columns: columnsReducer});
 export type RootState = ReturnType<typeof reducers>;
 
 const persistedReducer = persistReducer(

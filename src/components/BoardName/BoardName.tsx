@@ -4,11 +4,12 @@ import {styles} from './styles';
 
 interface BoardProps {
   name: string;
+  onTap: () => void;
 }
 
-export const BoardName: React.FC<BoardProps> = ({name}) => {
+export const BoardName: React.FC<BoardProps> = ({name, onTap}) => {
   return (
-    <View style={styles.boardBorder}>
+    <View onTouchStart={onTap} style={styles.boardBorder}>
       <Text style={styles.boardText}>{name}</Text>
     </View>
   );

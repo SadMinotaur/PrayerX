@@ -8,7 +8,7 @@ import {
 } from '../dto/auth/AuthSingInDtos';
 
 class Api {
-  #urlBase: string = '';
+  #urlBase: string;
   #token: string = '';
 
   constructor(baseUrl: string) {
@@ -22,7 +22,7 @@ class Api {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: user,
+      body: JSON.stringify(user),
     })
       .then((resp) => resp.json())
       .then((json: AuthSignInSuccessDto) => {
@@ -38,10 +38,15 @@ class Api {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: user,
+
+      body: JSON.stringify(user),
     })
       .then((resp) => resp.json())
       .then((json: AuthSignUpSuccessDto) => {
+        // TODO: This is not serious
+        if (json.hasOwnProperty('code')) {
+          throw new Error('Not ok req');
+        }
         this.#token = json.token;
         return json;
       });

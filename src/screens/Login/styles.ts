@@ -14,4 +14,19 @@ export const styles = StyleSheet.create({
   inputBorder: {
     margin: 20,
   },
+  button: {
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#72A8BC',
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+  },
+  buttonText: {
+    textTransform: 'uppercase',
+    fontSize: 13,
+    lineHeight: 16,
+    fontFamily: 'SFUIText-Medium',
+  },
 });

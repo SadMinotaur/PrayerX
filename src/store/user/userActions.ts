@@ -11,7 +11,6 @@ export interface LoginUserSuccessPd {
   id: number;
   email: string;
   name: string;
-  token: string;
 }
 export const loginActionSuccess = createAction<LoginUserSuccessPd>(
   'LOGIN_USER_SUCCESS',
@@ -30,9 +29,9 @@ export interface RegActionPd {
 }
 export const regAction = createAction<RegActionPd>('REG_USER_REQUEST');
 export interface RegActionSuccessPd {
+  id: number;
   email: string;
   name: string;
-  password: string;
 }
 export const regActionSuccess = createAction<RegActionSuccessPd>(
   'REG_USER_SUCCESS',

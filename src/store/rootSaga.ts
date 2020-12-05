@@ -1,6 +1,6 @@
 import {all} from 'redux-saga/effects';
-import {watchOnSingIn, watchOnSingUp} from './user/userSagas';
+import {watchOnUserSignIn, watchOnUserSignUp} from './user/userSagas';
 
 export function* rootSaga() {
-  yield all([watchOnSingIn(), watchOnSingUp()]);
+  yield all([watchOnUserSignIn(), watchOnUserSignUp()]);
 }

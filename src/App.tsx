@@ -5,9 +5,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Board} from './screens/Board';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
-import {PlusButton} from './components/PlusButton';
-import {Title} from './components/Title';
-import {Settings} from './components/Settings';
+import {PlusIcon} from './components/PlusIcon';
+import {Title} from './common-components/Title';
+import {SettingsIcon} from './components/SettingsIcon';
 import {Login} from './screens/Login';
 
 const Stack = createStackNavigator();
@@ -18,7 +18,8 @@ export const App = () => {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={
-            store.getState().user.token === '' ? 'Login' : 'MyDesc'
+            store.getState().user.email === '' ? 'Login' : 'MyDesc'
+            // 'Login'
           }>
           <Stack.Screen
             name="Login"
@@ -26,7 +27,7 @@ export const App = () => {
               headerStyle: {
                 elevation: 0,
               },
-              headerTitle: () => <Title name="Login" />,
+              headerTitle: () => <Title name="User" />,
             }}
             component={Login}
           />
@@ -38,7 +39,8 @@ export const App = () => {
                 elevation: 0,
                 height: 64,
               },
-              headerRight: () => <PlusButton />,
+              headerLeft: () => null,
+              headerRight: () => <PlusIcon />,
               headerTitle: () => <Title moved={true} name="My Desc" />,
             }}
             component={AllBoards}
@@ -50,7 +52,8 @@ export const App = () => {
                 borderBottomWidth: 0,
                 elevation: 0,
               },
-              headerRight: () => <Settings />,
+              headerLeft: () => null,
+              headerRight: () => <SettingsIcon />,
               headerTitle: () => <Title moved={true} name="TODO" />,
             }}
             component={Board}

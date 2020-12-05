@@ -7,3 +7,5 @@ export const popupSlice = createSlice({
     changePopup: (state, action: PayloadAction<number>) => action.payload,
   },
 });
+
+// Will remove later
