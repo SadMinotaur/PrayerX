@@ -1,8 +1,8 @@
-import {ColumnsDto} from './ColumnsDto';
+import {ColumnDto} from './ColumnsDto';
 
 export type CardDto = {
   title: string;
   description: string;
   checked: boolean;
-  column: ColumnsDto;
+  column: ColumnDto;
 };

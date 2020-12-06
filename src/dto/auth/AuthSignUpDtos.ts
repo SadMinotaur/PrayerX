@@ -1,4 +1,4 @@
-import {ColumnsDto} from '../ColumnsDto';
+import {ColumnDto} from '../ColumnsDto';
 
 export type AuthSignUpReqDto = {
   email: string;
@@ -11,6 +11,6 @@ export type AuthSignUpSuccessDto = {
   name: string;
   password: string;
   token: string;
-  columns: ColumnsDto[];
+  columns: ColumnDto[];
   id: number;
 };

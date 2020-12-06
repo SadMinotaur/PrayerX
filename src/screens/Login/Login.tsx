@@ -5,6 +5,7 @@ import {Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import {Title} from '../../common-components/Title';
+import {getColumnsRequest} from '../../store/columns/columnsAction';
 import {loginActionRequest, regAction} from '../../store/user/userActions';
 import {styles} from './styles';
 
@@ -24,6 +25,7 @@ export const Login: React.FC = ({}) => {
             password: formData.password,
           }),
         );
+        dispatch(getColumnsRequest());
       } else {
         dispatch(
           regAction({
@@ -95,10 +97,7 @@ export const Login: React.FC = ({}) => {
           />
         </View>
         <Button
-          onPress={() => {
-            handleSubmit(onSubmit);
-            console.log('here');
-          }}
+          onPress={handleSubmit(onSubmit)}
           title={loginState ? 'Sing-in' : 'Sing-up'}
         />
       </ScrollView>

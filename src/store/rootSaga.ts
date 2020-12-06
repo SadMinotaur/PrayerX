@@ -1,6 +1,7 @@
 import {all} from 'redux-saga/effects';
-import {watchOnUserSignIn, watchOnUserSignUp} from './user/userSagas';
+import {watchOnColumns} from './columns/columnsSagas';
+import {watchOnUserChange} from './user/userSagas';
 
 export function* rootSaga() {
-  yield all([watchOnUserSignIn(), watchOnUserSignUp()]);
+  yield all([watchOnUserChange(), watchOnColumns()]);
 }

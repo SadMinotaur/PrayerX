@@ -6,6 +6,7 @@ import {
   AuthSignInReqDto,
   AuthSignInSuccessDto,
 } from '../dto/auth/AuthSingInDtos';
+import {ColumnDto} from '../dto/ColumnsDto';
 
 class Api {
   #urlBase: string;
@@ -15,7 +16,7 @@ class Api {
     this.#urlBase = baseUrl;
   }
 
-  async signIn(user: AuthSignInReqDto) {
+  async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
     return fetch(this.#urlBase + 'auth/sign-in', {
       method: 'POST',
       headers: {
@@ -27,11 +28,12 @@ class Api {
       .then((resp) => resp.json())
       .then((json: AuthSignInSuccessDto) => {
         this.#token = json.token;
+        console.log(this.#token);
         return json;
       });
   }
 
-  async singUp(user: AuthSignUpReqDto) {
+  async singUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
     return fetch(this.#urlBase + 'auth/sign-up', {
       method: 'POST',
       headers: {
@@ -50,6 +52,18 @@ class Api {
         this.#token = json.token;
         return json;
       });
+  }
+
+  async getColumns(): Promise<ColumnDto[]> {
+    return fetch(this.#urlBase + 'columns', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'bearer ' + this.#token,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((json: ColumnDto[]) => json);
   }
 }
 
