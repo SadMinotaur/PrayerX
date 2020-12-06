@@ -6,7 +6,7 @@ import {
   AuthSignInReqDto,
   AuthSignInSuccessDto,
 } from '../dto/auth/AuthSingInDtos';
-import {ColumnDto} from '../dto/ColumnsDto';
+import {ColumnDto, ColumnDtoCreate} from '../dto/columns/ColumnsDto';
 
 class Api {
   #urlBase: string;
@@ -28,7 +28,6 @@ class Api {
       .then((resp) => resp.json())
       .then((json: AuthSignInSuccessDto) => {
         this.#token = json.token;
-        console.log(this.#token);
         return json;
       });
   }
@@ -59,11 +58,55 @@ class Api {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        Authorization: 'bearer ' + this.#token,
+        Authorization: ' bearer ' + this.#token,
       },
     })
       .then((resp) => resp.json())
       .then((json: ColumnDto[]) => json);
+  }
+
+  async addColumn(column: ColumnDtoCreate) {
+    return fetch(this.#urlBase + '', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: ' bearer ' + this.#token,
+      },
+      body: JSON.stringify(column),
+    }).then((resp) => resp.json());
+  }
+
+  async selectColumn(id: number) {
+    return fetch(this.#urlBase + 'columns/' + id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: ' bearer ' + this.#token,
+      },
+    }).then((resp) => resp.json());
+  }
+
+  async updateColumn(id: number, column: ColumnDtoCreate) {
+    return fetch(this.#urlBase + 'columns/' + id, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: ' bearer ' + this.#token,
+      },
+      body: JSON.stringify(column),
+    }).then((resp) => resp.json());
+  }
+
+  async deleteColumn(id: number) {
+    return fetch(this.#urlBase + 'columns/' + id, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: ' bearer ' + this.#token,
+      },
+    }).then((resp) => resp.json());
   }
 }
 

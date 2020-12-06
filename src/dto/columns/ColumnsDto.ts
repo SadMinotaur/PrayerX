@@ -3,3 +3,8 @@ export type ColumnDto = {
   title: string;
   description: string;
 };
+
+export type ColumnDtoCreate = {
+  title: string;
+  description: string;
+};

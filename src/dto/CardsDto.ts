@@ -1,4 +1,4 @@
-import {ColumnDto} from './ColumnsDto';
+import {ColumnDto} from './columns/ColumnsDto';
 
 export type CardDto = {
   title: string;
