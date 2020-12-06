@@ -2,12 +2,8 @@ import {createAction} from '@reduxjs/toolkit';
 import {Column} from './columnsTypes';
 
 export const getColumnsRequest = createAction('GET_COLUMNS_REQUEST');
-export interface SetColumnsActionPd {
-  columns: Column[];
-}
-export const getColumnsSuccess = createAction<SetColumnsActionPd>(
-  'GET_COLUMNS_SUCCESS',
-);
+
+export const getColumnsSuccess = createAction<Column[]>('GET_COLUMNS_SUCCESS');
 export interface LoginActionFailurePd {
   error: string;
 }

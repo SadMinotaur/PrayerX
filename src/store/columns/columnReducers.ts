@@ -6,6 +6,6 @@ import {Column} from './columnsTypes';
 export const columnsReducer = createReducer([] as Column[], (builder) => {
   builder.addCase(
     getColumnsSuccess,
-    (state: Column[], action) => action.payload.columns,
+    (state: Column[], action) => action.payload,
   );
 });

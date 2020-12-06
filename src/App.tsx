@@ -7,7 +7,7 @@ import {Provider} from 'react-redux';
 import {store} from './store/store';
 import {PlusIcon} from './common-components/PlusIcon';
 import {Title} from './common-components/Title';
-import {SettingsIcon} from './components/SettingsIcon';
+import {SettingsIcon} from './common-components/SettingsIcon';
 import {Login} from './screens/Login';
 
 const Stack = createStackNavigator();
@@ -16,9 +16,7 @@ export const App = () => (
   <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={
-          store.getState().user.email === '' ? 'Login' : 'MyDesc'
-        }>
+        initialRouteName={store.getState().user.id === -1 ? 'Login' : 'MyDesc'}>
         <Stack.Screen
           name="Login"
           options={{
@@ -39,7 +37,7 @@ export const App = () => (
             },
             headerLeft: () => null,
             headerRight: () => <PlusIcon size={16} />,
-            headerTitle: () => <Title moved={true} name="My Desc" />,
+            headerTitle: () => <Title movedRight={true} name="My Desc" />,
           }}
           component={AllBoards}
         />
@@ -52,7 +50,7 @@ export const App = () => (
             },
             headerLeft: () => null,
             headerRight: () => <SettingsIcon />,
-            headerTitle: () => <Title moved={true} name="TODO" />,
+            headerTitle: () => <Title movedRight={true} name="TODO" />,
           }}
           component={Board}
         />

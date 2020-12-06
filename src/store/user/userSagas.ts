@@ -1,7 +1,7 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
-import {setColumnsAction, SetColumnsActionPd} from '../columns/columnsAction';
+import {getColumnsRequest, getColumnsSuccess} from '../columns/columnsAction';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -28,6 +28,7 @@ function* singInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
       password: password,
     });
     yield put(loginActionSuccess(json));
+    yield put(getColumnsRequest());
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
   }
@@ -42,7 +43,7 @@ function* singUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
       password: password,
     });
     yield put(regActionSuccess(json as RegActionSuccessPd));
-    yield put(setColumnsAction({columns: json.columns} as SetColumnsActionPd));
+    yield put(getColumnsSuccess(json.columns));
   } catch (e) {
     yield put(regActionFailure(e.toString()));
   }

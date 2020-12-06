@@ -6,7 +6,12 @@ import {
   AuthSignInReqDto,
   AuthSignInSuccessDto,
 } from '../dto/auth/AuthSingInDtos';
-import {ColumnDto, ColumnDtoCreate} from '../dto/columns/ColumnsDto';
+import {CardDto} from '../dto/CardsDto';
+import {
+  ColumnDto,
+  ColumnDtoCreate,
+  ColumnDtoCreateResp,
+} from '../dto/columns/ColumnsDto';
 
 class Api {
   #urlBase: string;
@@ -65,7 +70,7 @@ class Api {
       .then((json: ColumnDto[]) => json);
   }
 
-  async addColumn(column: ColumnDtoCreate) {
+  async addColumn(column: ColumnDtoCreate): Promise<ColumnDtoCreateResp> {
     return fetch(this.#urlBase + '', {
       method: 'POST',
       headers: {
@@ -106,6 +111,18 @@ class Api {
         Accept: 'application/json',
         Authorization: ' bearer ' + this.#token,
       },
+    }).then((resp) => resp.json());
+  }
+
+  async createCard(column: number, card: CardDto) {
+    return fetch(this.#urlBase + 'columns/' + column + '/cards', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: ' bearer ' + this.#token,
+      },
+      body: JSON.stringify(card),
     }).then((resp) => resp.json());
   }
 }

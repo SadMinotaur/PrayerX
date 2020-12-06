@@ -6,15 +6,13 @@ interface Props {
   onClick?: () => void;
 }
 
-export const PlusIcon: React.FC<Props> = ({onClick, size}) => {
-  return (
-    <Plus
-      onTouchStart={onClick}
-      width={size}
-      height={size}
-      style={{
-        margin: 15,
-      }}
-    />
-  );
-};
+export const PlusIcon: React.FC<Props> = ({onClick, size}) => (
+  <Plus
+    onTouchStart={onClick}
+    width={size}
+    height={size}
+    style={{
+      margin: 15,
+    }}
+  />
+);

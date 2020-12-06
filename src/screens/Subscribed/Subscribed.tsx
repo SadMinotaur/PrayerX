@@ -1,7 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
-import {PlusIcon} from '../../common-components/PlusIcon';
+import {View} from 'react-native';
 import {styles} from './styles';
 
 export const Subscribed: React.FC = () => {

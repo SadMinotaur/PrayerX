@@ -1,11 +1,7 @@
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
 import {loginActionFailure} from '../user/userActions';
-import {
-  getColumnsRequest,
-  getColumnsSuccess,
-  SetColumnsActionPd,
-} from './columnsAction';
+import {getColumnsRequest, getColumnsSuccess} from './columnsAction';
 
 export function* watchOnColumns() {
   yield takeLatest(getColumnsRequest, getColumnsSaga);
@@ -14,7 +10,7 @@ export function* watchOnColumns() {
 function* getColumnsSaga() {
   try {
     const json = yield API.getColumns();
-    yield put(getColumnsSuccess(json as SetColumnsActionPd));
+    yield put(getColumnsSuccess(json));
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
   }

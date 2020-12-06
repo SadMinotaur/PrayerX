@@ -8,3 +8,10 @@ export type ColumnDtoCreate = {
   title: string;
   description: string;
 };
+
+export type ColumnDtoCreateResp = {
+  title: string;
+  description: string;
+  user: string;
+  id: number;
+};

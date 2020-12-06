@@ -5,7 +5,6 @@ import {Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import {Title} from '../../common-components/Title';
-import {getColumnsRequest} from '../../store/columns/columnsAction';
 import {loginActionRequest, regAction} from '../../store/user/userActions';
 import {styles} from './styles';
 
@@ -13,32 +12,28 @@ export const Login: React.FC = ({}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const {register, handleSubmit, setValue} = useForm({});
+  const {register, handleSubmit, setValue} = useForm();
   const [loginState, setLoginState] = useState(false);
 
-  const onSubmit = useCallback(
-    (formData) => {
-      if (loginState) {
-        dispatch(
-          loginActionRequest({
-            email: formData.email,
-            password: formData.password,
-          }),
-        );
-        dispatch(getColumnsRequest());
-      } else {
-        dispatch(
-          regAction({
-            email: formData.email,
-            name: formData.name,
-            password: formData.password,
-          }),
-        );
-      }
-      navigation.navigate('MyDesc', {});
-    },
-    [dispatch, loginState, navigation],
-  );
+  function onSubmit(formData: any) {
+    if (loginState) {
+      dispatch(
+        loginActionRequest({
+          email: formData.email,
+          password: formData.password,
+        }),
+      );
+    } else {
+      dispatch(
+        regAction({
+          email: formData.email,
+          name: formData.name,
+          password: formData.password,
+        }),
+      );
+    }
+    navigation.navigate('MyDesc', {});
+  }
 
   const onChangeField = useCallback(
     (name: string) => (text: string) => {
@@ -58,40 +53,35 @@ export const Login: React.FC = ({}) => {
       <ScrollView style={styles.background}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            setLoginState((ps) => !ps);
-          }}>
+          onPress={() => setLoginState((ps) => !ps)}>
           <Text style={styles.buttonText}>
             {loginState ? 'Sing-up' : 'Sing-in'}
           </Text>
         </TouchableOpacity>
         {!loginState && (
           <View style={styles.inputBorder}>
-            <Title name={'Name'} />
+            <Title movedLeft={true} name={'Name'} />
             <TextInput
-              placeholder="Name"
               onChangeText={onChangeField('name')}
               style={styles.textInput}
             />
           </View>
         )}
         <View style={styles.inputBorder}>
-          <Title name={'Email'} />
+          <Title movedLeft={true} name={'Email'} />
           <TextInput
             autoCompleteType="email"
             keyboardType="email-address"
             textContentType="emailAddress"
-            placeholder="Email"
             onChangeText={onChangeField('email')}
             style={styles.textInput}
           />
         </View>
         <View style={styles.inputBorder}>
-          <Title name={'Password'} />
+          <Title movedLeft={true} name={'Password'} />
           <TextInput
             secureTextEntry
             autoCompleteType="password"
-            placeholder="Password"
             onChangeText={onChangeField('password')}
             style={styles.textInput}
           />
