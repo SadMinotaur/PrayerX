@@ -1,4 +1,5 @@
 import {PayloadAction} from '@reduxjs/toolkit';
+import {Alert} from 'react-native';
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
 import {getColumnsRequest, getColumnsSuccess} from '../columns/columnsAction';
@@ -31,6 +32,7 @@ function* singInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
     yield put(getColumnsRequest());
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
+    Alert.alert('Something went wrong!');
   }
 }
 
@@ -46,5 +48,6 @@ function* singUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
     yield put(getColumnsSuccess(json.columns));
   } catch (e) {
     yield put(regActionFailure(e.toString()));
+    Alert.alert('Something went wrong!');
   }
 }

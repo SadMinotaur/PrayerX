@@ -1,1 +1,1 @@
-export {PlusIcon} from './HandsIcon';
+export {HandsIcon} from './HandsIcon';

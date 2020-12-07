@@ -10,3 +10,19 @@ export interface LoginActionFailurePd {
 export const getColumnsFailure = createAction<LoginActionFailurePd>(
   'GET_COLUMNS_FAILURE',
 );
+
+export interface addColumnActionRequestPd {
+  name: string;
+  desc: string;
+}
+export const addColumnRequest = createAction<addColumnActionRequestPd>(
+  'ADD_COLUMN_REQUEST',
+);
+
+export const addColumnSuccess = createAction<Column>('ADD_COLUMN_SUCCESS');
+export interface addColumnActionFailurePd {
+  error: string;
+}
+export const addColumnFailure = createAction<addColumnActionFailurePd>(
+  'ADD_COLUMN_FAILURE',
+);

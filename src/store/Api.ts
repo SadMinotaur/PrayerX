@@ -21,6 +21,13 @@ class Api {
     this.#urlBase = baseUrl;
   }
 
+  containsError(json: any) {
+    // TODO: Return to this later
+    if (json.hasOwnProperty('code') || json.hasOwnProperty('error')) {
+      throw new Error('Not ok req');
+    }
+  }
+
   async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
     return fetch(this.#urlBase + 'auth/sign-in', {
       method: 'POST',
@@ -32,6 +39,7 @@ class Api {
     })
       .then((resp) => resp.json())
       .then((json: AuthSignInSuccessDto) => {
+        this.containsError(json);
         this.#token = json.token;
         return json;
       });
@@ -49,10 +57,7 @@ class Api {
     })
       .then((resp) => resp.json())
       .then((json: AuthSignUpSuccessDto) => {
-        // TODO: This is not serious
-        if (json.hasOwnProperty('code')) {
-          throw new Error('Not ok req');
-        }
+        this.containsError(json);
         this.#token = json.token;
         return json;
       });
@@ -67,11 +72,14 @@ class Api {
       },
     })
       .then((resp) => resp.json())
-      .then((json: ColumnDto[]) => json);
+      .then((json: ColumnDto[]) => {
+        this.containsError(json);
+        return json;
+      });
   }
 
   async addColumn(column: ColumnDtoCreate): Promise<ColumnDtoCreateResp> {
-    return fetch(this.#urlBase + '', {
+    return fetch(this.#urlBase + 'columns', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -79,17 +87,27 @@ class Api {
         Authorization: ' bearer ' + this.#token,
       },
       body: JSON.stringify(column),
-    }).then((resp) => resp.json());
+    })
+      .then((resp) => resp.json())
+      .then((json: ColumnDtoCreateResp) => {
+        this.containsError(json);
+        return json;
+      });
   }
 
-  async selectColumn(id: number) {
+  async selectColumn(id: number): Promise<ColumnDtoCreateResp> {
     return fetch(this.#urlBase + 'columns/' + id, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         Authorization: ' bearer ' + this.#token,
       },
-    }).then((resp) => resp.json());
+    })
+      .then((resp) => resp.json())
+      .then((json: ColumnDtoCreateResp) => {
+        this.containsError(json);
+        return json;
+      });
   }
 
   async updateColumn(id: number, column: ColumnDtoCreate) {
@@ -101,7 +119,12 @@ class Api {
         Authorization: ' bearer ' + this.#token,
       },
       body: JSON.stringify(column),
-    }).then((resp) => resp.json());
+    })
+      .then((resp) => resp.json())
+      .then((json: ColumnDtoCreateResp) => {
+        this.containsError(json);
+        return json;
+      });
   }
 
   async deleteColumn(id: number) {
@@ -111,7 +134,12 @@ class Api {
         Accept: 'application/json',
         Authorization: ' bearer ' + this.#token,
       },
-    }).then((resp) => resp.json());
+    })
+      .then((resp) => resp.json())
+      .then((json: any) => {
+        this.containsError(json);
+        return json;
+      });
   }
 
   async createCard(column: number, card: CardDto) {
@@ -123,7 +151,12 @@ class Api {
         Authorization: ' bearer ' + this.#token,
       },
       body: JSON.stringify(card),
-    }).then((resp) => resp.json());
+    })
+      .then((resp) => resp.json())
+      .then((json: any) => {
+        this.containsError(json);
+        return json;
+      });
   }
 }
 

@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {getColumnsSuccess} from './columnsAction';
+import {addColumnSuccess, getColumnsSuccess} from './columnsAction';
 
 import {Column} from './columnsTypes';
 
@@ -8,4 +8,8 @@ export const columnsReducer = createReducer([] as Column[], (builder) => {
     getColumnsSuccess,
     (state: Column[], action) => action.payload,
   );
+  builder.addCase(addColumnSuccess, (state: Column[], action) => [
+    ...state,
+    action.payload,
+  ]);
 });

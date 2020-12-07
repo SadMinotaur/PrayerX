@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {PlusIcon} from '../../common-components/PlusIcon';
-import {SwipeableCard} from '../../components/SwipeableCard';
+import {PlusIcon} from '../../../common-components/PlusIcon';
+import {SwipeableCard} from '../../../components/SwipeableCard';
 import {styles} from './styles';
 
 export const MyPrayers: React.FC = () => {
@@ -10,7 +10,9 @@ export const MyPrayers: React.FC = () => {
   const [newCardName, setNewCardName] = useState('');
 
   function addNewCard(v: string): void {
-    if (v.trim() === '') return;
+    if (v.trim() === '') {
+      return;
+    }
     setNewCardName(v);
   }
 
@@ -20,7 +22,7 @@ export const MyPrayers: React.FC = () => {
         contentContainerStyle={{alignItems: 'center'}}
         style={styles.container}>
         <View style={styles.textInputBorder}>
-          <PlusIcon size={19} />
+          <PlusIcon marginTop={14} size={19} />
           <TextInput
             style={styles.textInput}
             value={newCardName}

@@ -30,14 +30,7 @@ export const App = () => (
         <Stack.Screen
           name="MyDesc"
           options={{
-            headerStyle: {
-              borderBottomWidth: 1,
-              elevation: 0,
-              height: 64,
-            },
-            headerLeft: () => null,
-            headerRight: () => <PlusIcon size={16} />,
-            headerTitle: () => <Title movedRight={true} name="My Desc" />,
+            headerShown: false,
           }}
           component={AllBoards}
         />
