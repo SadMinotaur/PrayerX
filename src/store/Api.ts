@@ -45,7 +45,7 @@ class Api {
       });
   }
 
-  async singUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
+  async signUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
     return fetch(this.#urlBase + 'auth/sign-up', {
       method: 'POST',
       headers: {

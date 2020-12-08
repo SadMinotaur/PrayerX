@@ -17,11 +17,11 @@ import {
 } from './userActions';
 
 export function* watchOnUserChange() {
-  yield takeLatest(loginActionRequest, singInUserSaga);
-  yield takeLatest(regAction, singUpUserSaga);
+  yield takeLatest(loginActionRequest, signInUserSaga);
+  yield takeLatest(regAction, signUpUserSaga);
 }
 
-function* singInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
+function* signInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
   try {
     const {email, password} = payloadAction.payload;
     const json: LoginUserSuccessPd = yield API.signIn({
@@ -36,10 +36,10 @@ function* singInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
   }
 }
 
-function* singUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
+function* signUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
   try {
     const {email, password, name} = payloadAction.payload;
-    const json = yield API.singUp({
+    const json = yield API.signUp({
       email: email,
       name: name,
       password: password,

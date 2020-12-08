@@ -55,7 +55,7 @@ export const Login: React.FC = ({}) => {
           style={styles.button}
           onPress={() => setLoginState((ps) => !ps)}>
           <Text style={styles.buttonText}>
-            {loginState ? 'Sing-up' : 'Sing-in'}
+            {loginState ? 'Sign-up' : 'Sign-in'}
           </Text>
         </TouchableOpacity>
         {!loginState && (
@@ -88,7 +88,7 @@ export const Login: React.FC = ({}) => {
         </View>
         <Button
           onPress={handleSubmit(onSubmit)}
-          title={loginState ? 'Sing-in' : 'Sing-up'}
+          title={loginState ? 'Sign-in' : 'Sign-up'}
         />
       </ScrollView>
     </>
