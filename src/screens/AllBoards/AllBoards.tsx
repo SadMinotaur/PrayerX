@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
 import {Button, Modal, ScrollView, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {PlusIcon} from '../../common-components/PlusIcon';
 import {Title} from '../../common-components/Title';
 import {BoardName} from '../../components/BoardName';
@@ -75,6 +76,7 @@ export const AllBoards: React.FC = () => {
           </View>
         </View>
       </Modal>
+      <LoadingPopup state={true} />
     </>
   );
 };

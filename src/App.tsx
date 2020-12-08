@@ -5,7 +5,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Board} from './screens/Board';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
-import {PlusIcon} from './common-components/PlusIcon';
 import {Title} from './common-components/Title';
 import {SettingsIcon} from './common-components/SettingsIcon';
 import {Login} from './screens/Login';

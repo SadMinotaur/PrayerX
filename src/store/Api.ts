@@ -23,7 +23,11 @@ class Api {
 
   containsError(json: any) {
     // TODO: Return to this later
-    if (json.hasOwnProperty('code') || json.hasOwnProperty('error')) {
+    if (
+      json.hasOwnProperty('code') ||
+      json.hasOwnProperty('error') ||
+      json.hasOwnProperty('message')
+    ) {
       throw new Error('Not ok req');
     }
   }

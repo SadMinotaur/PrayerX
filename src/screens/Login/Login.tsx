@@ -1,38 +1,103 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Button, ScrollView, Text, View} from 'react-native';
+import {Alert, Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
+import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {Title} from '../../common-components/Title';
-import {loginActionRequest, regAction} from '../../store/user/userActions';
+import {
+  getColumnsFailure,
+  getColumnsRequest,
+  getColumnsSuccess,
+} from '../../store/columns/columnsAction';
+import {promiseListener} from '../../store/store';
+import {
+  loginActionFailure,
+  loginActionRequest,
+  loginActionSuccess,
+  regAction,
+  regActionFailure,
+  regActionSuccess,
+} from '../../store/user/userActions';
 import {styles} from './styles';
 
 export const Login: React.FC = ({}) => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
-
   const {register, handleSubmit, setValue} = useForm();
-  const [loginState, setLoginState] = useState(false);
+  const [isSignInState, setIsSignInState] = useState(false);
+  const [waitingPopupState, setPopupState] = useState(false);
 
-  function onSubmit(formData: any) {
-    if (loginState) {
-      dispatch(
-        loginActionRequest({
+  const signIn = useCallback(
+    (formData: any) => {
+      promiseListener
+        .createAsyncFunction({
+          start: loginActionRequest.type,
+          resolve: loginActionSuccess.type,
+          reject: loginActionFailure.type,
+        })
+        .asyncFunction({
           email: formData.email,
           password: formData.password,
-        }),
-      );
-    } else {
-      dispatch(
-        regAction({
+        })
+        .then(
+          () => {
+            promiseListener
+              .createAsyncFunction({
+                start: getColumnsRequest.type,
+                resolve: getColumnsSuccess.type,
+                reject: getColumnsFailure.type,
+              })
+              .asyncFunction()
+              .then(
+                () => {
+                  navigation.navigate('MyDesc', {});
+                  setPopupState(false);
+                },
+                () => showError(),
+              );
+          },
+          () => showError(),
+        );
+    },
+    [navigation],
+  );
+
+  const reg = useCallback(
+    (formData: any) => {
+      promiseListener
+        .createAsyncFunction({
+          start: regAction.type,
+          resolve: regActionSuccess.type,
+          reject: regActionFailure.type,
+        })
+        .asyncFunction({
           email: formData.email,
           name: formData.name,
           password: formData.password,
-        }),
-      );
+        })
+        .then(
+          () => {
+            navigation.navigate('MyDesc', {});
+            setPopupState(false);
+          },
+          () => showError(),
+        );
+    },
+    [navigation],
+  );
+
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+    setPopupState(false);
+  }
+
+  function onSubmit(formData: any): void {
+    setPopupState(true);
+    if (isSignInState) {
+      signIn(formData);
+    } else {
+      reg(formData);
     }
-    navigation.navigate('MyDesc', {});
   }
 
   const onChangeField = useCallback(
@@ -53,12 +118,12 @@ export const Login: React.FC = ({}) => {
       <ScrollView style={styles.background}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => setLoginState((ps) => !ps)}>
+          onPress={() => setIsSignInState((ps) => !ps)}>
           <Text style={styles.buttonText}>
-            {loginState ? 'Sign-up' : 'Sign-in'}
+            {isSignInState ? 'Sign-up' : 'Sign-in'}
           </Text>
         </TouchableOpacity>
-        {!loginState && (
+        {!isSignInState && (
           <View style={styles.inputBorder}>
             <Title movedLeft={true} name={'Name'} />
             <TextInput
@@ -88,9 +153,10 @@ export const Login: React.FC = ({}) => {
         </View>
         <Button
           onPress={handleSubmit(onSubmit)}
-          title={loginState ? 'Sign-in' : 'Sign-up'}
+          title={isSignInState ? 'Sign-in' : 'Sign-up'}
         />
       </ScrollView>
+      <LoadingPopup state={waitingPopupState} />
     </>
   );
 };

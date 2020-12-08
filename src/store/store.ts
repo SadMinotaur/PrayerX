@@ -13,6 +13,8 @@ const reduxPromiseListener = createReduxPromiseListener();
 const reducers = combineReducers({user: userReducer, columns: columnsReducer});
 export type RootState = ReturnType<typeof reducers>;
 
+AsyncStorage.clear();
+
 const persistedReducer = persistReducer(
   {
     key: 'root',
@@ -29,7 +31,6 @@ export const store = createStore(
   ),
 );
 persistStore(store);
-export type StoreDispatchType = typeof store.dispatch;
 
 sagaMiddleware.run(rootSaga);
 
