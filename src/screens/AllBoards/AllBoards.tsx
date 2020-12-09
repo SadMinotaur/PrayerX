@@ -8,6 +8,11 @@ import {PlusIcon} from '../../common-components/PlusIcon';
 import {Title} from '../../common-components/Title';
 import {BoardName} from '../../components/BoardName';
 import {
+  getCardsFailure,
+  getCardsRequest,
+  getCardsSuccess,
+} from '../../store/cards/cardsAction';
+import {
   addColumnFailure,
   addColumnRequest,
   addColumnSuccess,
@@ -22,11 +27,6 @@ export const AllBoards: React.FC = () => {
 
   const [modalAddColState, setAddColModalState] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
-
-  function showError(): void {
-    Alert.alert('Something went wrong!');
-    setModalLoading(false);
-  }
 
   const addColumn = useCallback((nameInput: string, descInput: string) => {
     setAddColModalState(false);
@@ -44,6 +44,28 @@ export const AllBoards: React.FC = () => {
       );
   }, []);
 
+  const getColumnCards = useCallback(
+    (id: number) => {
+      promiseListener
+        .createAsyncFunction({
+          start: getCardsRequest.type,
+          resolve: getCardsSuccess.type,
+          reject: getCardsFailure.type,
+        })
+        .asyncFunction()
+        .then(
+          () => navigation.navigate('TODO', {id: id}),
+          () => showError(),
+        );
+    },
+    [navigation],
+  );
+
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+    setModalLoading(false);
+  }
+
   return (
     <>
       <View style={styles.header}>
@@ -60,7 +82,7 @@ export const AllBoards: React.FC = () => {
         {columns.map(({id, title}) => (
           <BoardName
             key={title + id}
-            onTap={() => navigation.navigate('TODO', {id: id})}
+            onTap={() => getColumnCards(id)}
             name={title}
           />
         ))}

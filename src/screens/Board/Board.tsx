@@ -90,7 +90,10 @@ export const Board: React.FC = () => {
             showIcon: true,
             indicatorStyle: {backgroundColor: '#72A8BC'},
           }}>
-          <Tab.Screen name="My Prayers" component={MyPrayers} />
+          <Tab.Screen
+            name="My Prayers"
+            children={() => MyPrayers({id: column.id})}
+          />
           <Tab.Screen
             name="Subscribed"
             options={{

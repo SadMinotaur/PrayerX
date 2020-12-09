@@ -4,7 +4,7 @@ import Plus from './../../../assets/icons/plus.svg';
 interface Props {
   size: number;
   marginTop?: number;
-  onTapEnd?: () => void;
+  onTapEnd: () => void;
 }
 
 export const PlusIcon: React.FC<Props> = ({

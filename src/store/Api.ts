@@ -6,7 +6,11 @@ import {
   AuthSignInReqDto,
   AuthSignInSuccessDto,
 } from '../dto/auth/AuthSingInDtos';
-import {CardDto} from '../dto/CardsDto';
+import {
+  GetAllCardsDto,
+  PostCardDto,
+  PostCardDtoResp,
+} from '../dto/cards/CardsDto';
 import {
   ColumnDto,
   ColumnDtoCreate,
@@ -117,7 +121,10 @@ class Api {
       });
   }
 
-  public async updateColumn(id: number, column: ColumnDtoCreate) {
+  public async updateColumn(
+    id: number,
+    column: ColumnDtoCreate,
+  ): Promise<ColumnDtoCreateResp> {
     return fetch(this.urlBase + 'columns/' + id, {
       method: 'PUT',
       headers: {
@@ -134,6 +141,7 @@ class Api {
       });
   }
 
+  // Not required in task
   public async deleteColumn(id: number) {
     return fetch(this.urlBase + 'columns/' + id, {
       method: 'DELETE',
@@ -149,18 +157,33 @@ class Api {
       });
   }
 
-  public async createCard(column: number, card: CardDto) {
-    return fetch(this.urlBase + 'columns/' + column + '/cards', {
+  public async getCards(): Promise<GetAllCardsDto[]> {
+    return fetch(this.urlBase + 'cards/', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: ' bearer ' + this.token,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((json: GetAllCardsDto[]) => {
+        this.containsError(json);
+        return json;
+      });
+  }
+
+  public async createCard(card: PostCardDto): Promise<PostCardDtoResp> {
+    return fetch(this.urlBase + 'columns/' + card.column + '/cards', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: ' bearer ' + this.token,
       },
-      body: JSON.stringify(card),
+      body: JSON.stringify({...card, column: {}}),
     })
       .then((resp) => resp.json())
-      .then((json: any) => {
+      .then((json: PostCardDtoResp) => {
         this.containsError(json);
         return json;
       });

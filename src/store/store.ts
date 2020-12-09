@@ -8,9 +8,14 @@ import logger from 'redux-logger';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {columnsReducer} from './columns/columnReducers';
 import createReduxPromiseListener from 'redux-promise-listener';
+import {cardsReducer} from './cards/cardsReducers';
 
 const reduxPromiseListener = createReduxPromiseListener();
-const reducers = combineReducers({user: userReducer, columns: columnsReducer});
+const reducers = combineReducers({
+  user: userReducer,
+  columns: columnsReducer,
+  cards: cardsReducer,
+});
 export type RootState = ReturnType<typeof reducers>;
 
 AsyncStorage.clear();
@@ -34,4 +39,4 @@ persistStore(store);
 
 sagaMiddleware.run(rootSaga);
 
-export const promiseListener = reduxPromiseListener; // <---------- IMPORTANT
+export const promiseListener = reduxPromiseListener;
