@@ -26,3 +26,18 @@ export interface addColumnActionFailurePd {
 export const addColumnFailure = createAction<addColumnActionFailurePd>(
   'ADD_COLUMN_FAILURE',
 );
+
+export const updateColumnRequest = createAction<Column>(
+  'UPDATE_COLUMN_REQUEST',
+);
+
+export const updateColumnSuccess = createAction<Column>(
+  'UPDATE_COLUMN_SUCCESS',
+);
+
+export interface updateColumnActionFailurePd {
+  error: string;
+}
+export const updateColumnFailure = createAction<updateColumnActionFailurePd>(
+  'UPDATE_COLUMN_FAILURE',
+);

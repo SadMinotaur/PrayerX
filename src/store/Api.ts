@@ -14,14 +14,14 @@ import {
 } from '../dto/columns/ColumnsDto';
 
 class Api {
-  #urlBase: string;
-  #token: string = '';
+  private urlBase: string;
+  private token: string = '';
 
   constructor(baseUrl: string) {
-    this.#urlBase = baseUrl;
+    this.urlBase = baseUrl;
   }
 
-  containsError(json: any) {
+  private containsError(json: any) {
     // TODO: Return to this later
     if (
       json.hasOwnProperty('code') ||
@@ -32,8 +32,8 @@ class Api {
     }
   }
 
-  async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
-    return fetch(this.#urlBase + 'auth/sign-in', {
+  public async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
+    return fetch(this.urlBase + 'auth/sign-in', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -43,14 +43,15 @@ class Api {
     })
       .then((resp) => resp.json())
       .then((json: AuthSignInSuccessDto) => {
+        console.log(json.token);
         this.containsError(json);
-        this.#token = json.token;
+        this.token = json.token;
         return json;
       });
   }
 
-  async signUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
-    return fetch(this.#urlBase + 'auth/sign-up', {
+  public async signUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
+    return fetch(this.urlBase + 'auth/sign-up', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -62,17 +63,17 @@ class Api {
       .then((resp) => resp.json())
       .then((json: AuthSignUpSuccessDto) => {
         this.containsError(json);
-        this.#token = json.token;
+        this.token = json.token;
         return json;
       });
   }
 
-  async getColumns(): Promise<ColumnDto[]> {
-    return fetch(this.#urlBase + 'columns', {
+  public async getColumns(): Promise<ColumnDto[]> {
+    return fetch(this.urlBase + 'columns', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
     })
       .then((resp) => resp.json())
@@ -82,13 +83,15 @@ class Api {
       });
   }
 
-  async addColumn(column: ColumnDtoCreate): Promise<ColumnDtoCreateResp> {
-    return fetch(this.#urlBase + 'columns', {
+  public async addColumn(
+    column: ColumnDtoCreate,
+  ): Promise<ColumnDtoCreateResp> {
+    return fetch(this.urlBase + 'columns', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
       body: JSON.stringify(column),
     })
@@ -99,12 +102,12 @@ class Api {
       });
   }
 
-  async selectColumn(id: number): Promise<ColumnDtoCreateResp> {
-    return fetch(this.#urlBase + 'columns/' + id, {
+  public async selectColumn(id: number): Promise<ColumnDtoCreateResp> {
+    return fetch(this.urlBase + 'columns/' + id, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
     })
       .then((resp) => resp.json())
@@ -114,13 +117,13 @@ class Api {
       });
   }
 
-  async updateColumn(id: number, column: ColumnDtoCreate) {
-    return fetch(this.#urlBase + 'columns/' + id, {
+  public async updateColumn(id: number, column: ColumnDtoCreate) {
+    return fetch(this.urlBase + 'columns/' + id, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
       body: JSON.stringify(column),
     })
@@ -131,12 +134,12 @@ class Api {
       });
   }
 
-  async deleteColumn(id: number) {
-    return fetch(this.#urlBase + 'columns/' + id, {
+  public async deleteColumn(id: number) {
+    return fetch(this.urlBase + 'columns/' + id, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
     })
       .then((resp) => resp.json())
@@ -146,13 +149,13 @@ class Api {
       });
   }
 
-  async createCard(column: number, card: CardDto) {
-    return fetch(this.#urlBase + 'columns/' + column + '/cards', {
+  public async createCard(column: number, card: CardDto) {
+    return fetch(this.urlBase + 'columns/' + column + '/cards', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: ' bearer ' + this.#token,
+        Authorization: ' bearer ' + this.token,
       },
       body: JSON.stringify(card),
     })

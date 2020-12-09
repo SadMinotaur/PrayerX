@@ -8,7 +8,7 @@ interface BoardProps {
 }
 
 export const BoardName: React.FC<BoardProps> = ({name, onTap}) => (
-  <View onTouchStart={onTap} style={styles.boardBorder}>
+  <View onTouchEndCapture={onTap} style={styles.boardBorder}>
     <Text style={styles.boardText}>{name}</Text>
   </View>
 );

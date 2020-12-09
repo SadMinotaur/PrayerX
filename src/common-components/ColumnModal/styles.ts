@@ -1,26 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  scrollView: {alignItems: 'center'},
-  container: {
-    paddingTop: 15,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    flexDirection: 'row',
-    height: 64,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
-    backgroundColor: '#fff',
-  },
-  headerTitle: {
-    flex: 7,
-  },
-  headerAddIcon: {
-    flex: 1,
-  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',

@@ -1,6 +1,20 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  mainContainerAlign: {},
+  mainContainer: {flex: 1},
+  header: {
+    flexDirection: 'row',
+    height: 64,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  headerTitle: {
+    flex: 7,
+  },
+  headerAddIcon: {
+    flex: 1,
+  },
   iconContainer: {
     marginTop: 2,
     width: 16,

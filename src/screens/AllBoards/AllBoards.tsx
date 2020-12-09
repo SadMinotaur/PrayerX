@@ -1,82 +1,77 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {Button, Modal, ScrollView, Text, TextInput, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import {Alert, ScrollView, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {ColumnModal} from '../../common-components/ColumnModal';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {PlusIcon} from '../../common-components/PlusIcon';
 import {Title} from '../../common-components/Title';
 import {BoardName} from '../../components/BoardName';
-import {addColumnRequest} from '../../store/columns/columnsAction';
+import {
+  addColumnFailure,
+  addColumnRequest,
+  addColumnSuccess,
+} from '../../store/columns/columnsAction';
 import {Column} from '../../store/columns/columnsTypes';
-import {RootState} from '../../store/store';
+import {promiseListener, RootState} from '../../store/store';
 import {styles} from './styles';
 
 export const AllBoards: React.FC = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
   const columns: Column[] = useSelector((state: RootState) => state.columns);
 
-  const [modalState, setModalState] = useState(false);
-  const [columnNameInput, setColumnNameInput] = useState('');
-  const [columnDescInput, setColumnDescInput] = useState('');
+  const [modalAddColState, setAddColModalState] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
 
-  const addColumn = useCallback(() => {
-    setModalState((ps) => !ps);
-    dispatch(addColumnRequest({desc: columnNameInput, name: columnNameInput}));
-    setColumnNameInput('');
-    setColumnDescInput('');
-  }, [columnNameInput, dispatch]);
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+    setModalLoading(false);
+  }
+
+  const addColumn = useCallback((nameInput: string, descInput: string) => {
+    setAddColModalState(false);
+    setModalLoading(true);
+    promiseListener
+      .createAsyncFunction({
+        start: addColumnRequest.type,
+        resolve: addColumnSuccess.type,
+        reject: addColumnFailure.type,
+      })
+      .asyncFunction({desc: descInput, name: nameInput})
+      .then(
+        () => setModalLoading(false),
+        () => showError(),
+      );
+  }, []);
 
   return (
     <>
-      <ScrollView
-        contentContainerStyle={{alignItems: 'center'}}
-        style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.headerTitle}>
-            <Title movedRight={true} name="My Desc" />
-          </View>
-          <View style={styles.headerAddIcon}>
-            <PlusIcon onClick={() => setModalState((ps) => !ps)} size={16} />
-          </View>
+      <View style={styles.header}>
+        <View style={styles.headerTitle}>
+          <Title movedRight={true} name="My Desc" />
         </View>
+        <View style={styles.headerAddIcon}>
+          <PlusIcon onTapEnd={() => setAddColModalState(true)} size={16} />
+        </View>
+      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        style={styles.container}>
         {columns.map(({id, title}) => (
           <BoardName
-            key={title}
-            onTap={() => {
-              navigation.navigate('TODO', {id: id});
-            }}
+            key={title + id}
+            onTap={() => navigation.navigate('TODO', {id: id})}
             name={title}
           />
         ))}
       </ScrollView>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalState}
-        onRequestClose={() => setModalState(false)}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text>Enter new Column</Text>
-            <TextInput
-              style={styles.modalInput}
-              autoCompleteType="name"
-              placeholder={'Column name'}
-              value={columnNameInput}
-              onChangeText={(v: string) => setColumnNameInput(v)}
-            />
-            <TextInput
-              style={styles.modalInput}
-              autoCompleteType="name"
-              placeholder={'Column description'}
-              value={columnDescInput}
-              onChangeText={(v: string) => setColumnDescInput(v)}
-            />
-            <Button onPress={addColumn} title={'Submit'} />
-          </View>
-        </View>
-      </Modal>
-      <LoadingPopup state={true} />
+      <ColumnModal
+        topName="Enter new column"
+        state={modalAddColState}
+        onClose={() => setAddColModalState(false)}
+        onSubmit={addColumn}
+      />
+      <LoadingPopup state={modalLoading} />
     </>
   );
 };

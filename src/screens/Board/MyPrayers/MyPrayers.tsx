@@ -19,7 +19,7 @@ export const MyPrayers: React.FC = () => {
   return (
     <>
       <ScrollView
-        contentContainerStyle={{alignItems: 'center'}}
+        contentContainerStyle={styles.containerAlign}
         style={styles.container}>
         <View style={styles.textInputBorder}>
           <PlusIcon marginTop={14} size={19} />

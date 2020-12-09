@@ -2,6 +2,10 @@ import React from 'react';
 import SettingsI from './../../../assets/icons/settings.svg';
 import {styles} from './styles';
 
-export const SettingsIcon: React.FC = () => {
-  return <SettingsI style={styles.icon} />;
-};
+interface Props {
+  onTap: () => void;
+}
+
+export const SettingsIcon: React.FC<Props> = ({onTap}) => (
+  <SettingsI onTouchEnd={onTap} style={styles.icon} />
+);

@@ -1,5 +1,4 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import {Alert} from 'react-native';
 import {put, takeLatest} from 'redux-saga/effects';
 import {ColumnDtoCreateResp} from '../../dto/columns/ColumnsDto';
 import {API} from '../Api';
@@ -11,12 +10,16 @@ import {
   addColumnSuccess,
   getColumnsRequest,
   getColumnsSuccess,
+  updateColumnFailure,
+  updateColumnRequest,
+  updateColumnSuccess,
 } from './columnsAction';
 import {Column} from './columnsTypes';
 
 export function* watchOnColumns() {
   yield takeLatest(getColumnsRequest, getColumnsSaga);
   yield takeLatest(addColumnRequest, addColumnSaga);
+  yield takeLatest(updateColumnRequest, updateColumnSaga);
 }
 
 function* getColumnsSaga() {
@@ -25,7 +28,6 @@ function* getColumnsSaga() {
     yield put(getColumnsSuccess(json));
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
-    Alert.alert('Something went wrong!');
   }
 }
 
@@ -46,6 +48,24 @@ function* addColumnSaga(
     );
   } catch (e) {
     yield put(addColumnFailure(e.toString()));
-    Alert.alert('Something went wrong!');
+  }
+}
+
+function* updateColumnSaga(payloadAction: PayloadAction<Column>) {
+  try {
+    const {id, title, description} = payloadAction.payload;
+    const json: ColumnDtoCreateResp = yield API.updateColumn(id, {
+      title: title,
+      description: description,
+    });
+    yield put(
+      updateColumnSuccess({
+        id: json.id,
+        title: json.title,
+        description: json.description,
+      }),
+    );
+  } catch (e) {
+    yield put(updateColumnFailure(e.toString()));
   }
 }
