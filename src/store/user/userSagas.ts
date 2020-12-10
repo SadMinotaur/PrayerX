@@ -1,8 +1,7 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import {Alert} from 'react-native';
-import {put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
-import {setColumnsAction, SetColumnsActionPd} from '../columns/columnsAction';
+import {getColumnsRequest, getColumnsSuccess} from '../columns/columnsAction';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -16,40 +15,36 @@ import {
   RegActionSuccessPd,
 } from './userActions';
 
-export function* watchOnUserSignIn() {
-  yield takeEvery(loginActionRequest, singInUserSaga);
+export function* watchOnUserChange() {
+  yield takeLatest(loginActionRequest, signInUserSaga);
+  yield takeLatest(regAction, signUpUserSaga);
 }
 
-export function* watchOnUserSignUp() {
-  yield takeEvery(regAction, singUpUserSaga);
-}
-
-function* singInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
+function* signInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
   try {
     const {email, password} = payloadAction.payload;
-    const json = yield API.signIn({
+    const json: LoginUserSuccessPd = yield API.signIn({
       email: email,
       password: password,
     });
-    put(loginActionSuccess(json as LoginUserSuccessPd));
+    yield put(loginActionSuccess(json));
+    // yield put(getColumnsRequest());
   } catch (e) {
-    put(loginActionFailure(e.toString()));
-    Alert.alert('Something went wrong!');
+    yield put(loginActionFailure(e.toString()));
   }
 }
 
-function* singUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
+function* signUpUserSaga(payloadAction: PayloadAction<RegActionPd>) {
   try {
     const {email, password, name} = payloadAction.payload;
-    const json = yield API.singUp({
+    const json = yield API.signUp({
       email: email,
       name: name,
       password: password,
     });
     yield put(regActionSuccess(json as RegActionSuccessPd));
-    yield put(setColumnsAction({columns: json.columns} as SetColumnsActionPd));
+    yield put(getColumnsSuccess(json.columns));
   } catch (e) {
     yield put(regActionFailure(e.toString()));
-    Alert.alert('Something went wrong!');
   }
 }

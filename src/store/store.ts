@@ -7,9 +7,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 import logger from 'redux-logger';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {columnsReducer} from './columns/columnReducers';
+import createReduxPromiseListener from 'redux-promise-listener';
+import {cardsReducer} from './cards/cardsReducers';
 
-const reducers = combineReducers({user: userReducer, columns: columnsReducer});
+const reduxPromiseListener = createReduxPromiseListener();
+const reducers = combineReducers({
+  user: userReducer,
+  columns: columnsReducer,
+  cards: cardsReducer,
+});
 export type RootState = ReturnType<typeof reducers>;
+
+AsyncStorage.clear();
 
 const persistedReducer = persistReducer(
   {
@@ -22,9 +31,12 @@ const persistedReducer = persistReducer(
 const sagaMiddleware: SagaMiddleware = createSagaMiddleware();
 export const store = createStore(
   persistedReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware, logger)),
+  composeWithDevTools(
+    applyMiddleware(reduxPromiseListener.middleware, sagaMiddleware, logger),
+  ),
 );
 persistStore(store);
-export type StoreDispatchType = typeof store.dispatch;
 
 sagaMiddleware.run(rootSaga);
+
+export const promiseListener = reduxPromiseListener;

@@ -1,42 +1,104 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Button, ScrollView, Text, View} from 'react-native';
+import {Alert, Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
+import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {Title} from '../../common-components/Title';
-import {loginActionRequest, regAction} from '../../store/user/userActions';
+import {
+  getColumnsFailure,
+  getColumnsRequest,
+  getColumnsSuccess,
+} from '../../store/columns/columnsAction';
+import {promiseListener} from '../../store/store';
+import {
+  loginActionFailure,
+  loginActionRequest,
+  loginActionSuccess,
+  regAction,
+  regActionFailure,
+  regActionSuccess,
+} from '../../store/user/userActions';
 import {styles} from './styles';
 
 export const Login: React.FC = ({}) => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const {register, handleSubmit, setValue} = useForm();
+  const [isSignInState, setIsSignInState] = useState(false);
+  const [waitingPopupState, setPopupState] = useState(false);
 
-  const {register, handleSubmit, setValue} = useForm({});
-  const [loginState, setLoginState] = useState(false);
-
-  const onSubmit = useCallback(
-    (formData) => {
-      if (loginState) {
-        dispatch(
-          loginActionRequest({
-            email: formData.email,
-            password: formData.password,
-          }),
+  const signIn = useCallback(
+    (formData: any) => {
+      promiseListener
+        .createAsyncFunction({
+          start: loginActionRequest.type,
+          resolve: loginActionSuccess.type,
+          reject: loginActionFailure.type,
+        })
+        .asyncFunction({
+          email: formData.email,
+          password: formData.password,
+        })
+        .then(
+          () => {
+            promiseListener
+              .createAsyncFunction({
+                start: getColumnsRequest.type,
+                resolve: getColumnsSuccess.type,
+                reject: getColumnsFailure.type,
+              })
+              .asyncFunction()
+              .then(
+                () => {
+                  navigation.navigate('MyDesc', {});
+                  setPopupState(false);
+                },
+                () => showError(),
+              );
+          },
+          () => showError(),
         );
-      } else {
-        dispatch(
-          regAction({
-            email: formData.email,
-            name: formData.name,
-            password: formData.password,
-          }),
-        );
-      }
-      navigation.navigate('MyDesc', {});
     },
-    [dispatch, loginState, navigation],
+    [navigation],
   );
+
+  const reg = useCallback(
+    (formData: any) => {
+      promiseListener
+        .createAsyncFunction({
+          start: regAction.type,
+          resolve: regActionSuccess.type,
+          reject: regActionFailure.type,
+        })
+        .asyncFunction({
+          email: formData.email,
+          name: formData.name,
+          password: formData.password,
+        })
+        .then(
+          () => {
+            navigation.navigate('MyDesc', {});
+            setPopupState(false);
+          },
+          () => showError(),
+        );
+    },
+    [navigation],
+  );
+
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+    setPopupState(false);
+  }
+
+  function onSubmit(formData: any): void {
+    setPopupState(true);
+    if (isSignInState) {
+      signIn(formData);
+    } else {
+      reg(formData);
+    }
+  }
 
   const onChangeField = useCallback(
     (name: string) => (text: string) => {
@@ -56,52 +118,45 @@ export const Login: React.FC = ({}) => {
       <ScrollView style={styles.background}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {
-            setLoginState((ps) => !ps);
-          }}>
+          onPress={() => setIsSignInState((ps) => !ps)}>
           <Text style={styles.buttonText}>
-            {loginState ? 'Sing-up' : 'Sing-in'}
+            {isSignInState ? 'Sign-up' : 'Sign-in'}
           </Text>
         </TouchableOpacity>
-        {!loginState && (
+        {!isSignInState && (
           <View style={styles.inputBorder}>
-            <Title name={'Name'} />
+            <Title movedLeft={true} name={'Name'} />
             <TextInput
-              placeholder="Name"
               onChangeText={onChangeField('name')}
               style={styles.textInput}
             />
           </View>
         )}
         <View style={styles.inputBorder}>
-          <Title name={'Email'} />
+          <Title movedLeft={true} name={'Email'} />
           <TextInput
             autoCompleteType="email"
             keyboardType="email-address"
             textContentType="emailAddress"
-            placeholder="Email"
             onChangeText={onChangeField('email')}
             style={styles.textInput}
           />
         </View>
         <View style={styles.inputBorder}>
-          <Title name={'Password'} />
+          <Title movedLeft={true} name={'Password'} />
           <TextInput
             secureTextEntry
             autoCompleteType="password"
-            placeholder="Password"
             onChangeText={onChangeField('password')}
             style={styles.textInput}
           />
         </View>
         <Button
-          onPress={() => {
-            handleSubmit(onSubmit);
-            console.log('here');
-          }}
-          title={loginState ? 'Sing-in' : 'Sing-up'}
+          onPress={handleSubmit(onSubmit)}
+          title={isSignInState ? 'Sign-in' : 'Sign-up'}
         />
       </ScrollView>
+      <LoadingPopup state={waitingPopupState} />
     </>
   );
 };
