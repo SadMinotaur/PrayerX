@@ -19,3 +19,18 @@ export interface CreateCardFailurePd {
 export const createCardsFailure = createAction<CreateCardFailurePd>(
   'ADD_CARD_FAILURE',
 );
+
+export interface DeleteCardRequestPd {
+  idColumn: number;
+  idCard: number;
+}
+export const deleteCardsRequest = createAction<DeleteCardRequestPd>(
+  'DELETE_CARD_REQUEST',
+);
+export const deleteCardsSuccess = createAction<Card>('DELETE_CARD_SUCCESS');
+export interface CreateCardFailurePd {
+  error: string;
+}
+export const deleteCardsFailure = createAction<CreateCardFailurePd>(
+  'DELETE_CARD_FAILURE',
+);

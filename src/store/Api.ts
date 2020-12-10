@@ -58,6 +58,16 @@ class Api {
     }).then((resp) => resp.json());
   }
 
+  private deleteRequest(url: string): Promise<any> {
+    return fetch(this.urlBase + url, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: ' bearer ' + this.token,
+      },
+    }).then((resp) => resp.json());
+  }
+
   private updateRequest(url: string, body: any): Promise<any> {
     return fetch(this.urlBase + url, {
       method: 'PUT',
@@ -153,15 +163,21 @@ class Api {
   }
 
   public async createCard(card: PostCardDto): Promise<PostCardDtoResp> {
-    console.log(card);
     return this.postRequest('columns/' + card.column + '/cards', {
       ...card,
       column: {},
     }).then((json: PostCardDtoResp) => {
-      console.log(json);
       this.containsError(json);
       return json;
     });
+  }
+
+  public async deleteCard(columnId: number, cardId: number): Promise<any> {
+    return this.deleteRequest('columns/' + columnId + '/' + cardId).then(
+      (json) => {
+        console.log(json);
+      },
+    );
   }
 }
 
