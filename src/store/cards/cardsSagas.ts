@@ -10,18 +10,21 @@ import {
   createCardsFailure,
   createCardsRequest,
   createCardsSuccess,
-  DeleteCardRequestPd,
   deleteCardsRequest,
   deleteCardsSuccess,
   getCardsFailure,
   getCardsRequest,
   getCardsSuccess,
+  updateCardsFailure,
+  updateCardsRequest,
+  updateCardsSuccess,
 } from './cardsAction';
 
 export function* watchOnCards() {
   yield takeLatest(getCardsRequest, getAllCardsSaga);
   yield takeLatest(createCardsRequest, addCardsSaga);
-  yield takeLatest(deleteCardsRequest, removeCardSaga);
+  yield takeLatest(deleteCardsRequest, deleteCardSaga);
+  yield takeLatest(updateCardsRequest, updateCardSaga);
 }
 
 function* getAllCardsSaga() {
@@ -42,12 +45,20 @@ function* addCardsSaga(action: PayloadAction<PostCardDto>) {
   }
 }
 
-function* removeCardSaga(action: PayloadAction<DeleteCardRequestPd>) {
+function* deleteCardSaga(action: PayloadAction<number>) {
   try {
-    const {idCard, idColumn} = action.payload;
-    const json = yield API.deleteCard(idCard, idColumn);
-    // yield put(deleteCardsSuccess());
+    yield API.deleteCard(action.payload);
+    yield put(deleteCardsSuccess(action.payload));
   } catch (e) {
     yield put(createCardsFailure(e.toString()));
+  }
+}
+
+function* updateCardSaga(action: PayloadAction<PostCardDto>) {
+  try {
+    const json = yield API.updateCard(action.payload);
+    yield put(updateCardsSuccess(json));
+  } catch (e) {
+    yield put(updateCardsFailure(e.toString()));
   }
 }

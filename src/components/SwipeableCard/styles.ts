@@ -1,6 +1,14 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  cardText: {
+    width: 170,
+    height: 20,
+    marginRight: 10,
+  },
+  prayText: {
+    marginRight: 10,
+  },
   swipeContainer: {
     width: 345,
     borderBottomWidth: 1,

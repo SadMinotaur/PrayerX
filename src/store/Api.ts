@@ -172,12 +172,20 @@ class Api {
     });
   }
 
-  public async deleteCard(columnId: number, cardId: number): Promise<any> {
-    return this.deleteRequest('columns/' + columnId + '/' + cardId).then(
-      (json) => {
-        console.log(json);
-      },
-    );
+  public async deleteCard(cardId: number): Promise<any> {
+    return this.deleteRequest('cards/' + cardId).then((json) => {
+      this.containsError(json);
+    });
+  }
+
+  public async updateCard(card: PostCardDto): Promise<any> {
+    return this.updateRequest('cards/' + card.column, {
+      ...card,
+      column: {},
+    }).then((json) => {
+      this.containsError(json);
+      return json;
+    });
   }
 }
 

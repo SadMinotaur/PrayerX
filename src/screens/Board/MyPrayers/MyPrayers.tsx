@@ -9,6 +9,9 @@ import {
   createCardsFailure,
   createCardsRequest,
   createCardsSuccess,
+  deleteCardsFailure,
+  deleteCardsRequest,
+  deleteCardsSuccess,
 } from '../../../store/cards/cardsAction';
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
@@ -47,6 +50,23 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
       );
   }, [idColumn, cardName]);
 
+  const deleteCard = useCallback((idCard: number) => {
+    setLoadingState(true);
+    promiseListener
+      .createAsyncFunction({
+        start: deleteCardsRequest.type,
+        resolve: deleteCardsSuccess.type,
+        reject: deleteCardsFailure.type,
+      })
+      .asyncFunction({
+        idCard: idCard,
+      })
+      .then(
+        () => setLoadingState(false),
+        () => showError(),
+      );
+  }, []);
+
   function showError(): void {
     Alert.alert('Something went wrong!');
     setLoadingState(false);
@@ -66,8 +86,13 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
-        {colCards.map(({id}) => (
-          <SwipeableCard key={id} />
+        {colCards.map(({id, title}) => (
+          <SwipeableCard
+            title={title}
+            onValueChange={() => {}}
+            onDeleteTap={() => deleteCard(id)}
+            key={id}
+          />
         ))}
         <TouchableOpacity
           style={styles.showAnsweredButton}

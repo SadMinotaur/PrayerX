@@ -15,12 +15,7 @@ export interface LoginUserSuccessPd {
 export const loginActionSuccess = createAction<LoginUserSuccessPd>(
   'LOGIN_USER_SUCCESS',
 );
-export interface LoginActionFailurePd {
-  error: string;
-}
-export const loginActionFailure = createAction<LoginActionFailurePd>(
-  'LOGIN_USER_FAILURE',
-);
+export const loginActionFailure = createAction<string>('LOGIN_USER_FAILURE');
 
 export interface RegActionPd {
   email: string;
@@ -36,9 +31,4 @@ export interface RegActionSuccessPd {
 export const regActionSuccess = createAction<RegActionSuccessPd>(
   'REG_USER_SUCCESS',
 );
-export interface RegActionFailurePd {
-  error: string;
-}
-export const regActionFailure = createAction<RegActionFailurePd>(
-  'REG_USER_FAILURE',
-);
+export const regActionFailure = createAction<string>('REG_USER_FAILURE');
