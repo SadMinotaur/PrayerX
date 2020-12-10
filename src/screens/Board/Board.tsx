@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Subscribed} from './Subscribed';
 import {MyPrayers} from './MyPrayers';
@@ -23,10 +23,11 @@ interface RouteProps {
   id: number;
 }
 
-export const Board: React.FC = () => {
-  const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
+export const Board: React.FC = () => {
   const route = useRoute();
+
   // Should be always a column there
   const column: Column = useSelector((state: RootState) =>
     state.columns.find(({id}) => id === (route.params as RouteProps).id),
@@ -63,6 +64,9 @@ export const Board: React.FC = () => {
     setIsLoading(false);
   }
 
+  // Works only this way
+  const MyPrayersScreen = () => MyPrayers({idColumn: column.id});
+
   return (
     <>
       <View style={styles.header}>
@@ -90,10 +94,7 @@ export const Board: React.FC = () => {
             showIcon: true,
             indicatorStyle: {backgroundColor: '#72A8BC'},
           }}>
-          <Tab.Screen
-            name="My Prayers"
-            children={() => MyPrayers({id: column.id})}
-          />
+          <Tab.Screen name="My Prayers" component={MyPrayersScreen} />
           <Tab.Screen
             name="Subscribed"
             options={{

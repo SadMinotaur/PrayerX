@@ -36,109 +36,97 @@ class Api {
     }
   }
 
-  public async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
-    return fetch(this.urlBase + 'auth/sign-in', {
+  private postRequest(url: string, body: any): Promise<any> {
+    return fetch(this.urlBase + url, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        Authorization: ' bearer ' + this.token,
       },
-      body: JSON.stringify(user),
-    })
-      .then((resp) => resp.json())
-      .then((json: AuthSignInSuccessDto) => {
-        console.log(json.token);
-        this.containsError(json);
-        this.token = json.token;
-        return json;
-      });
+      body: JSON.stringify(body),
+    }).then((resp) => resp.json());
   }
 
-  public async signUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
-    return fetch(this.urlBase + 'auth/sign-up', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify(user),
-    })
-      .then((resp) => resp.json())
-      .then((json: AuthSignUpSuccessDto) => {
-        this.containsError(json);
-        this.token = json.token;
-        return json;
-      });
-  }
-
-  public async getColumns(): Promise<ColumnDto[]> {
-    return fetch(this.urlBase + 'columns', {
+  private getRequest(url: string): Promise<any> {
+    return fetch(this.urlBase + url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         Authorization: ' bearer ' + this.token,
       },
-    })
-      .then((resp) => resp.json())
-      .then((json: ColumnDto[]) => {
-        this.containsError(json);
-        return json;
-      });
+    }).then((resp) => resp.json());
   }
 
-  public async addColumn(
-    column: ColumnDtoCreate,
-  ): Promise<ColumnDtoCreateResp> {
-    return fetch(this.urlBase + 'columns', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-      body: JSON.stringify(column),
-    })
-      .then((resp) => resp.json())
-      .then((json: ColumnDtoCreateResp) => {
-        this.containsError(json);
-        return json;
-      });
-  }
-
-  public async selectColumn(id: number): Promise<ColumnDtoCreateResp> {
-    return fetch(this.urlBase + 'columns/' + id, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((json: ColumnDtoCreateResp) => {
-        this.containsError(json);
-        return json;
-      });
-  }
-
-  public async updateColumn(
-    id: number,
-    column: ColumnDtoCreate,
-  ): Promise<ColumnDtoCreateResp> {
-    return fetch(this.urlBase + 'columns/' + id, {
+  private updateRequest(url: string, body: any): Promise<any> {
+    return fetch(this.urlBase + url, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: ' bearer ' + this.token,
       },
-      body: JSON.stringify(column),
-    })
-      .then((resp) => resp.json())
-      .then((json: ColumnDtoCreateResp) => {
+      body: JSON.stringify(body),
+    }).then((resp) => resp.json());
+  }
+
+  public async signIn(user: AuthSignInReqDto): Promise<AuthSignInSuccessDto> {
+    return this.postRequest('auth/sign-in', user).then(
+      (json: AuthSignInSuccessDto) => {
+        this.containsError(json);
+        this.token = json.token;
+        return json;
+      },
+    );
+  }
+
+  public async signUp(user: AuthSignUpReqDto): Promise<AuthSignUpSuccessDto> {
+    return this.postRequest('auth/sign-up', user).then(
+      (json: AuthSignUpSuccessDto) => {
+        this.containsError(json);
+        this.token = json.token;
+        return json;
+      },
+    );
+  }
+
+  public async getColumns(): Promise<ColumnDto[]> {
+    return this.getRequest('columns').then((json: ColumnDto[]) => {
+      this.containsError(json);
+      return json;
+    });
+  }
+
+  public async addColumn(
+    column: ColumnDtoCreate,
+  ): Promise<ColumnDtoCreateResp> {
+    return this.postRequest('columns', column).then(
+      (json: ColumnDtoCreateResp) => {
         this.containsError(json);
         return json;
-      });
+      },
+    );
+  }
+
+  public async selectColumn(id: number): Promise<ColumnDtoCreateResp> {
+    return this.getRequest('columns/' + id).then(
+      (json: ColumnDtoCreateResp) => {
+        this.containsError(json);
+        return json;
+      },
+    );
+  }
+
+  public async updateColumn(
+    id: number,
+    column: ColumnDtoCreate,
+  ): Promise<ColumnDtoCreateResp> {
+    return this.updateRequest('columns/' + id, column).then(
+      (json: ColumnDtoCreateResp) => {
+        this.containsError(json);
+        return json;
+      },
+    );
   }
 
   // Not required in task
@@ -158,35 +146,22 @@ class Api {
   }
 
   public async getCards(): Promise<GetAllCardsDto[]> {
-    return fetch(this.urlBase + 'cards/', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((json: GetAllCardsDto[]) => {
-        this.containsError(json);
-        return json;
-      });
+    return this.getRequest('cards/').then((json: GetAllCardsDto[]) => {
+      this.containsError(json);
+      return json;
+    });
   }
 
   public async createCard(card: PostCardDto): Promise<PostCardDtoResp> {
-    return fetch(this.urlBase + 'columns/' + card.column + '/cards', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-      body: JSON.stringify({...card, column: {}}),
-    })
-      .then((resp) => resp.json())
-      .then((json: PostCardDtoResp) => {
-        this.containsError(json);
-        return json;
-      });
+    console.log(card);
+    return this.postRequest('columns/' + card.column + '/cards', {
+      ...card,
+      column: {},
+    }).then((json: PostCardDtoResp) => {
+      console.log(json);
+      this.containsError(json);
+      return json;
+    });
   }
 }
 

@@ -2,6 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
+import {LoadingPopup} from '../../../common-components/LoadingPopup';
 import {PlusIcon} from '../../../common-components/PlusIcon';
 import {SwipeableCard} from '../../../components/SwipeableCard';
 import {
@@ -22,10 +23,12 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
   );
 
   const [cardsState, setCardsState] = useState(true);
-  const [newCardName, setNewCardName] = useState('');
+  const [loadingState, setLoadingState] = useState(false);
+  const [cardName, setCardName] = useState('');
 
   const createCard = useCallback(() => {
-    if (newCardName.trim() === '') return;
+    if (cardName.trim() === '') return;
+    setLoadingState(true);
     promiseListener
       .createAsyncFunction({
         start: createCardsRequest.type,
@@ -33,16 +36,21 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
         reject: createCardsFailure.type,
       })
       .asyncFunction({
-        title: newCardName,
+        title: cardName,
         description: '',
         checked: false,
         column: idColumn,
       })
       .then(
-        () => {},
-        () => Alert.alert('Something went wrong!'),
+        () => setLoadingState(false),
+        () => showError(),
       );
-  }, [idColumn, newCardName]);
+  }, [idColumn, cardName]);
+
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+    setLoadingState(false);
+  }
 
   return (
     <>
@@ -53,10 +61,9 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
           <PlusIcon onTapEnd={createCard} marginTop={14} size={19} />
           <TextInput
             style={styles.textInput}
-            autoCompleteType="name"
-            onChangeText={(v) => setNewCardName(v)}
-            value={newCardName}
             placeholder={'Add a prayer'}
+            value={cardName}
+            onChangeText={setCardName}
           />
         </View>
         {colCards.map(({id}) => (
@@ -70,6 +77,7 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+      <LoadingPopup state={loadingState} />
     </>
   );
 };

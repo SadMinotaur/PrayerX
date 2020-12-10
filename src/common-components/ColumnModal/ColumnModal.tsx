@@ -32,14 +32,14 @@ export const ColumnModal: React.FC<Props> = ({
             autoCompleteType="name"
             placeholder={'Column name'}
             value={columnNameInput}
-            onChangeText={(v: string) => setColumnNameInput(v)}
+            onChangeText={setColumnNameInput}
           />
           <TextInput
             style={styles.modalInput}
             autoCompleteType="name"
             placeholder={'Column description'}
             value={columnDescInput}
-            onChangeText={(v: string) => setColumnDescInput(v)}
+            onChangeText={setColumnDescInput}
           />
           <Button
             onPress={() => {
