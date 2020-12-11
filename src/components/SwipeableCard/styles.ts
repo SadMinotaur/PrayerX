@@ -7,7 +7,8 @@ export const styles = StyleSheet.create({
     marginRight: 10,
   },
   prayText: {
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 2,
   },
   swipeContainer: {
     width: 345,
@@ -32,7 +33,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'SFUIText-Medium',
     color: '#fff',
   },
-  line: {backgroundColor: 'blue', width: 3, height: 24, borderRadius: 3},
   checkBox: {
     marginLeft: 15,
     marginRight: 15,

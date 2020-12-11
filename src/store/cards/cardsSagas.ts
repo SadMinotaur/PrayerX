@@ -10,6 +10,7 @@ import {
   createCardsFailure,
   createCardsRequest,
   createCardsSuccess,
+  deleteCardsFailure,
   deleteCardsRequest,
   deleteCardsSuccess,
   getCardsFailure,
@@ -19,6 +20,7 @@ import {
   updateCardsRequest,
   updateCardsSuccess,
 } from './cardsAction';
+import {Card} from './cardsTypes';
 
 export function* watchOnCards() {
   yield takeLatest(getCardsRequest, getAllCardsSaga);
@@ -50,11 +52,11 @@ function* deleteCardSaga(action: PayloadAction<number>) {
     yield API.deleteCard(action.payload);
     yield put(deleteCardsSuccess(action.payload));
   } catch (e) {
-    yield put(createCardsFailure(e.toString()));
+    yield put(deleteCardsFailure(e.toString()));
   }
 }
 
-function* updateCardSaga(action: PayloadAction<PostCardDto>) {
+function* updateCardSaga(action: PayloadAction<Card>) {
   try {
     const json = yield API.updateCard(action.payload);
     yield put(updateCardsSuccess(json));

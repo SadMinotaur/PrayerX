@@ -4,7 +4,7 @@ import {Alert, ScrollView, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ColumnModal} from '../../common-components/ColumnModal';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
-import {PlusIcon} from '../../common-components/PlusIcon';
+import {PlusIcon} from '../../icons-components/PlusIcon';
 import {Title} from '../../common-components/Title';
 import {BoardName} from '../../components/BoardName';
 import {

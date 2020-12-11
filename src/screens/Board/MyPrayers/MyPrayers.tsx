@@ -3,15 +3,12 @@ import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {LoadingPopup} from '../../../common-components/LoadingPopup';
-import {PlusIcon} from '../../../common-components/PlusIcon';
+import {PlusIcon} from '../../../icons-components/PlusIcon';
 import {SwipeableCard} from '../../../components/SwipeableCard';
 import {
   createCardsFailure,
   createCardsRequest,
   createCardsSuccess,
-  deleteCardsFailure,
-  deleteCardsRequest,
-  deleteCardsSuccess,
 } from '../../../store/cards/cardsAction';
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
@@ -50,23 +47,6 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
       );
   }, [idColumn, cardName]);
 
-  const deleteCard = useCallback((idCard: number) => {
-    setLoadingState(true);
-    promiseListener
-      .createAsyncFunction({
-        start: deleteCardsRequest.type,
-        resolve: deleteCardsSuccess.type,
-        reject: deleteCardsFailure.type,
-      })
-      .asyncFunction({
-        idCard: idCard,
-      })
-      .then(
-        () => setLoadingState(false),
-        () => showError(),
-      );
-  }, []);
-
   function showError(): void {
     Alert.alert('Something went wrong!');
     setLoadingState(false);
@@ -86,14 +66,17 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
-        {colCards.map(({id, title}) => (
-          <SwipeableCard
-            title={title}
-            onValueChange={() => {}}
-            onDeleteTap={() => deleteCard(id)}
-            key={id}
-          />
-        ))}
+        {colCards.map(
+          (card) =>
+            !card.checked && (
+              <SwipeableCard
+                card={card}
+                setLoadingState={setLoadingState}
+                showError={showError}
+                key={card.id}
+              />
+            ),
+        )}
         <TouchableOpacity
           style={styles.showAnsweredButton}
           onPress={() => setCardsState((ps) => !ps)}>
@@ -101,6 +84,18 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             {cardsState ? 'Show answered prayers' : 'Hide ansewred prayers'}
           </Text>
         </TouchableOpacity>
+        {cardsState &&
+          colCards.map(
+            (card) =>
+              card.checked && (
+                <SwipeableCard
+                  card={card}
+                  setLoadingState={setLoadingState}
+                  showError={showError}
+                  key={card.id}
+                />
+              ),
+          )}
       </ScrollView>
       <LoadingPopup state={loadingState} />
     </>

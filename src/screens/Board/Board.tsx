@@ -1,11 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Subscribed} from './Subscribed';
 import {MyPrayers} from './MyPrayers';
 import {Alert, Text, View} from 'react-native';
 import {styles} from './styles';
 import {Title} from '../../common-components/Title';
-import {SettingsIcon} from '../../common-components/SettingsIcon';
+import {SettingsIcon} from '../../icons-components/SettingsIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';

@@ -14,9 +14,7 @@ export const deleteCardsRequest = createAction<number>('DELETE_CARD_REQUEST');
 export const deleteCardsSuccess = createAction<number>('DELETE_CARD_SUCCESS');
 export const deleteCardsFailure = createAction<string>('DELETE_CARD_FAILURE');
 
-export const updateCardsRequest = createAction<PostCardDto>(
-  'UPDATE_CARD_REQUEST',
-);
+export const updateCardsRequest = createAction<Card>('UPDATE_CARD_REQUEST');
 export const updateCardsSuccess = createAction<PostCardDto>(
   'UPDATE_CARD_SUCCESS',
 );

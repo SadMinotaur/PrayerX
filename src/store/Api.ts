@@ -16,6 +16,7 @@ import {
   ColumnDtoCreate,
   ColumnDtoCreateResp,
 } from '../dto/columns/ColumnsDto';
+import {Card} from './cards/cardsTypes';
 
 class Api {
   private urlBase: string;
@@ -32,7 +33,8 @@ class Api {
       json.hasOwnProperty('error') ||
       json.hasOwnProperty('message')
     ) {
-      throw new Error('Not ok req');
+      console.log(json);
+      throw new Error('Not ok resp');
     }
   }
 
@@ -141,18 +143,9 @@ class Api {
 
   // Not required in task
   public async deleteColumn(id: number) {
-    return fetch(this.urlBase + 'columns/' + id, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((json: any) => {
-        this.containsError(json);
-        return json;
-      });
+    return this.deleteRequest('columns/' + id).then((json) => {
+      this.containsError(json);
+    });
   }
 
   public async getCards(): Promise<GetAllCardsDto[]> {
@@ -178,9 +171,11 @@ class Api {
     });
   }
 
-  public async updateCard(card: PostCardDto): Promise<any> {
-    return this.updateRequest('cards/' + card.column, {
-      ...card,
+  public async updateCard(card: Card): Promise<any> {
+    return this.updateRequest('cards/' + card.id, {
+      title: card.title,
+      description: card.description,
+      checked: card.checked,
       column: {},
     }).then((json) => {
       this.containsError(json);
