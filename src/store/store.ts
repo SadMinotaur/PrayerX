@@ -18,7 +18,7 @@ const reducers = combineReducers({
 });
 export type RootState = ReturnType<typeof reducers>;
 
-AsyncStorage.clear();
+// AsyncStorage.clear();
 
 const persistedReducer = persistReducer(
   {

@@ -21,7 +21,7 @@ import {
 } from '../../store/user/userActions';
 import {styles} from './styles';
 
-export const Login: React.FC = ({}) => {
+export const Login: React.FC = () => {
   const navigation = useNavigation();
   const {register, handleSubmit, setValue} = useForm();
   const [isSignInState, setIsSignInState] = useState(false);

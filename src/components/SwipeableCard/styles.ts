@@ -1,6 +1,15 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  cardText: {
+    width: 160,
+    height: 20,
+    marginRight: 10,
+  },
+  prayText: {
+    marginLeft: 5,
+    marginRight: 2,
+  },
   swipeContainer: {
     width: 345,
     borderBottomWidth: 1,
@@ -24,7 +33,6 @@ export const styles = StyleSheet.create({
     fontFamily: 'SFUIText-Medium',
     color: '#fff',
   },
-  line: {backgroundColor: 'blue', width: 3, height: 24, borderRadius: 3},
   checkBox: {
     marginLeft: 15,
     marginRight: 15,

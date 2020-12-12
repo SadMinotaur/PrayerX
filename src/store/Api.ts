@@ -16,6 +16,7 @@ import {
   ColumnDtoCreate,
   ColumnDtoCreateResp,
 } from '../dto/columns/ColumnsDto';
+import {Card} from './cards/cardsTypes';
 
 class Api {
   private urlBase: string;
@@ -32,7 +33,8 @@ class Api {
       json.hasOwnProperty('error') ||
       json.hasOwnProperty('message')
     ) {
-      throw new Error('Not ok req');
+      console.log(json);
+      throw new Error('Not ok resp');
     }
   }
 
@@ -51,6 +53,16 @@ class Api {
   private getRequest(url: string): Promise<any> {
     return fetch(this.urlBase + url, {
       method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: ' bearer ' + this.token,
+      },
+    }).then((resp) => resp.json());
+  }
+
+  private deleteRequest(url: string): Promise<any> {
+    return fetch(this.urlBase + url, {
+      method: 'DELETE',
       headers: {
         Accept: 'application/json',
         Authorization: ' bearer ' + this.token,
@@ -131,18 +143,9 @@ class Api {
 
   // Not required in task
   public async deleteColumn(id: number) {
-    return fetch(this.urlBase + 'columns/' + id, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        Authorization: ' bearer ' + this.token,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((json: any) => {
-        this.containsError(json);
-        return json;
-      });
+    return this.deleteRequest('columns/' + id).then((json) => {
+      this.containsError(json);
+    });
   }
 
   public async getCards(): Promise<GetAllCardsDto[]> {
@@ -153,12 +156,28 @@ class Api {
   }
 
   public async createCard(card: PostCardDto): Promise<PostCardDtoResp> {
-    console.log(card);
     return this.postRequest('columns/' + card.column + '/cards', {
       ...card,
       column: {},
     }).then((json: PostCardDtoResp) => {
-      console.log(json);
+      this.containsError(json);
+      return json;
+    });
+  }
+
+  public async deleteCard(cardId: number): Promise<any> {
+    return this.deleteRequest('cards/' + cardId).then((json) => {
+      this.containsError(json);
+    });
+  }
+
+  public async updateCard(card: Card): Promise<PostCardDtoResp> {
+    return this.updateRequest('cards/' + card.id, {
+      title: card.title,
+      description: card.description,
+      checked: card.checked,
+      column: {},
+    }).then((json: PostCardDtoResp) => {
       this.containsError(json);
       return json;
     });

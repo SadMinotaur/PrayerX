@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   textInput: {
+    fontFamily: 'SFUIText-Light',
     flex: 1,
   },
   textInputBorder: {
@@ -16,6 +17,7 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#E5E5E5',
+    marginBottom: 10,
   },
   showAnsweredButton: {
     height: 30,

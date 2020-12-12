@@ -8,6 +8,6 @@ export const styles = StyleSheet.create({
     color: '#514D47',
     textAlign: 'center',
     letterSpacing: -0.24,
-    fontFamily: 'SFUIText-Medium',
+    fontFamily: 'SFUIText-Semibold',
   },
 });

@@ -4,7 +4,7 @@ import {Alert, ScrollView, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ColumnModal} from '../../common-components/ColumnModal';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
-import {PlusIcon} from '../../common-components/PlusIcon';
+import {PlusIcon} from '../../icons-components/PlusIcon';
 import {Title} from '../../common-components/Title';
 import {BoardName} from '../../components/BoardName';
 import {
@@ -46,6 +46,7 @@ export const AllBoards: React.FC = () => {
 
   const getColumnCards = useCallback(
     (id: number) => {
+      setModalLoading(true);
       promiseListener
         .createAsyncFunction({
           start: getCardsRequest.type,
@@ -54,7 +55,10 @@ export const AllBoards: React.FC = () => {
         })
         .asyncFunction()
         .then(
-          () => navigation.navigate('TODO', {id: id}),
+          () => {
+            setModalLoading(false);
+            navigation.navigate('TODO', {id: id});
+          },
           () => showError(),
         );
     },
@@ -80,11 +84,7 @@ export const AllBoards: React.FC = () => {
         contentContainerStyle={styles.scrollView}
         style={styles.container}>
         {columns.map(({id, title}) => (
-          <BoardName
-            key={title + id}
-            onTap={() => getColumnCards(id)}
-            name={title}
-          />
+          <BoardName key={id} onTap={() => getColumnCards(id)} name={title} />
         ))}
       </ScrollView>
       <ColumnModal
