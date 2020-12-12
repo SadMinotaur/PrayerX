@@ -2,7 +2,7 @@ import React from 'react';
 import {AllBoards} from './screens/AllBoards/AllBoards';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Board} from './screens/Board';
+import {ColumnComponent} from './screens/Board';
 import {Provider} from 'react-redux';
 import {store} from './store/store';
 import {Title} from './common-components/Title';
@@ -38,7 +38,7 @@ export const App: React.FC = () => (
           options={{
             headerShown: false,
           }}
-          component={Board}
+          component={ColumnComponent}
         />
         <Stack.Screen
           name="Card"

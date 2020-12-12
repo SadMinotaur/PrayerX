@@ -3,12 +3,12 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import {Card} from '../../store/cards/cardsTypes';
 import {RootState} from '../../store/store';
 import {styles} from './styles';
 import {HandsIcon} from '../../icons-components/HandsIcon';
 import {ArrowIcon} from '../../icons-components/ArrowIcon';
 import {LeftLine} from '../../icons-components/LeftLine';
+import {CardSelector} from '../../store/cards/cardsSelectors';
 
 interface RouteProps {
   id: number;
@@ -17,11 +17,9 @@ interface RouteProps {
 export const CardScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-
-  // Should be always a card there
-  const card: Card = useSelector((state: RootState) =>
-    state.cards.find(({id}) => id === (route.params as RouteProps).id),
-  ) as Card;
+  const {card} = useSelector((state: RootState) =>
+    CardSelector(state, {id: (route.params as RouteProps).id}),
+  );
 
   return (
     <>
@@ -40,10 +38,10 @@ export const CardScreen: React.FC = () => {
           <Text style={styles.lastPrayedText}>Last prayed 8 min ago</Text>
         </View>
         <View style={styles.statsTable}>
-          <View style={styles.statsTableItem}></View>
-          <View style={styles.statsTableItem}></View>
-          <View style={styles.statsTableItem}></View>
-          <View style={styles.statsTableItem}></View>
+          <View style={styles.statsTableItemTop}></View>
+          <View style={styles.statsTableItemTop}></View>
+          <View style={styles.statsTableItemBot}></View>
+          <View style={styles.statsTableItemBot}></View>
         </View>
       </ScrollView>
     </>

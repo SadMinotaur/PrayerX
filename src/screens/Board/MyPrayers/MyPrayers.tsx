@@ -12,23 +12,31 @@ import {
 } from '../../../store/cards/cardsAction';
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
-import {Card} from '../../../store/cards/cardsTypes';
+import {
+  ColumnCheckedCardsSelector,
+  ColumnUncheckedCardsSelector,
+} from '../../../store/columns/columnSelectors';
+import {useRoute} from '@react-navigation/native';
 
 interface Props {
   idColumn: number;
 }
 
-export const MyPrayers: React.FC<Props> = ({idColumn}) => {
-  const colUncheckedCards = useSelector((state: RootState) =>
-    state.cards.filter(
-      (v: Card) => idColumn === v.columnId && v.checked === false,
-    ),
-  );
+interface RouteProps {
+  id: number;
+}
 
-  const colCheckedCards = useSelector((state: RootState) =>
-    state.cards.filter(
-      (v: Card) => idColumn === v.columnId && v.checked === true,
-    ),
+export const MyPrayers: React.FC<Props> = ({idColumn}) => {
+  const route = useRoute();
+  const {cardsChecked} = useSelector((state: RootState) =>
+    ColumnCheckedCardsSelector(state, {
+      idColumn: (route.params as RouteProps).id,
+    }),
+  );
+  const {cardsUnchecked} = useSelector((state: RootState) =>
+    ColumnUncheckedCardsSelector(state, {
+      idColumn: (route.params as RouteProps).id,
+    }),
   );
 
   const [cardsState, setCardsState] = useState(true);
@@ -72,12 +80,12 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
           <PlusIcon onTapEnd={createCard} marginTop={14} size={19} />
           <TextInput
             style={styles.textInput}
-            placeholder={'Add a prayer'}
+            placeholder={'Add a prayer...'}
             value={cardName}
             onChangeText={setCardName}
           />
         </View>
-        {colUncheckedCards.map((card) => (
+        {cardsChecked.map((card) => (
           <SwipeableCard
             card={card}
             setLoadingState={setLoadingState}
@@ -93,7 +101,7 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
           </Text>
         </TouchableOpacity>
         {cardsState &&
-          colCheckedCards.map((card) => (
+          cardsUnchecked.map((card) => (
             <SwipeableCard
               card={card}
               setLoadingState={setLoadingState}

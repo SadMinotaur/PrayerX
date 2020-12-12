@@ -27,7 +27,7 @@ export const styles = StyleSheet.create({
     color: '#514D47',
     marginLeft: 15,
     lineHeight: 20,
-    fontFamily: 'SFUIText-Medium',
+    fontFamily: 'SFUIText-Regular',
     fontSize: 17,
   },
   statsTable: {
@@ -35,14 +35,22 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     height: 216,
-    backgroundColor: 'blue',
   },
-  statsTableItem: {
+  statsTableItemTop: {
     height: 108,
     width: '50%',
     backgroundColor: '#fff',
     borderColor: '#E5E5E5',
-    borderLeftWidth: 0,
     borderWidth: 1,
+    borderLeftWidth: 0,
+    borderBottomWidth: 0,
+  },
+  statsTableItemBot: {
+    height: 108,
+    width: '50%',
+    backgroundColor: '#fff',
+    borderColor: '#E5E5E5',
+    borderWidth: 1,
+    borderLeftWidth: 0,
   },
 });

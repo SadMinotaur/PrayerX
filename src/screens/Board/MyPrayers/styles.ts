@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     padding: 15,
   },
   textInput: {
+    fontFamily: 'SFUIText-Light',
     flex: 1,
   },
   textInputBorder: {

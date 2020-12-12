@@ -10,7 +10,6 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {promiseListener, RootState} from '../../store/store';
-import {Column} from '../../store/columns/columnsTypes';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {ColumnModal} from '../../common-components/ColumnModal';
 import {
@@ -18,6 +17,7 @@ import {
   updateColumnRequest,
   updateColumnSuccess,
 } from '../../store/columns/columnsAction';
+import {CurrentColumnSelector} from '../../store/columns/columnSelectors';
 
 interface RouteProps {
   id: number;
@@ -25,13 +25,11 @@ interface RouteProps {
 
 const Tab = createMaterialTopTabNavigator();
 
-export const Board: React.FC = () => {
+export const ColumnComponent: React.FC = () => {
   const route = useRoute();
-
-  // Should be always a column there
-  const column: Column = useSelector((state: RootState) =>
-    state.columns.find(({id}) => id === (route.params as RouteProps).id),
-  ) as Column;
+  const {column} = useSelector((state: RootState) =>
+    CurrentColumnSelector(state, {id: (route.params as RouteProps).id}),
+  );
 
   const [settingsModalState, setSettingsModalState] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,6 +82,7 @@ export const Board: React.FC = () => {
               flexDirection: 'row-reverse',
             },
             labelStyle: {
+              fontFamily: 'SFUIText-Semibold',
               fontSize: 13,
               lineHeight: 15.51,
             },
