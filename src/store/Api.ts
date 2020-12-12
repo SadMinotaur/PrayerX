@@ -171,13 +171,13 @@ class Api {
     });
   }
 
-  public async updateCard(card: Card): Promise<any> {
+  public async updateCard(card: Card): Promise<PostCardDtoResp> {
     return this.updateRequest('cards/' + card.id, {
       title: card.title,
       description: card.description,
       checked: card.checked,
       column: {},
-    }).then((json) => {
+    }).then((json: PostCardDtoResp) => {
       this.containsError(json);
       return json;
     });

@@ -4,5 +4,4 @@ export interface Card {
   description: string;
   checked: boolean;
   columnId: number;
-  commentsIds: [];
 }

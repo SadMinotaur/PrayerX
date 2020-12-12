@@ -16,6 +16,7 @@ import {
   updateCardsRequest,
   updateCardsSuccess,
 } from '../../store/cards/cardsAction';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props {
   card: Card;
@@ -29,6 +30,7 @@ export const SwipeableCard: React.FC<Props> = ({
   showError,
 }) => {
   const {id, title, checked} = card;
+  const navigation = useNavigation();
 
   const deleteCard = useCallback(() => {
     setLoadingState(true);
@@ -45,23 +47,20 @@ export const SwipeableCard: React.FC<Props> = ({
       );
   }, [id, setLoadingState, showError]);
 
-  const checkCard = useCallback(
-    (b: boolean) => {
-      setLoadingState(true);
-      promiseListener
-        .createAsyncFunction({
-          start: updateCardsRequest.type,
-          resolve: updateCardsSuccess.type,
-          reject: updateCardsFailure.type,
-        })
-        .asyncFunction({...card, checked: b} as Card)
-        .then(
-          () => setLoadingState(false),
-          () => showError(),
-        );
-    },
-    [card, setLoadingState, showError],
-  );
+  const checkCard = useCallback(() => {
+    setLoadingState(true);
+    promiseListener
+      .createAsyncFunction({
+        start: updateCardsRequest.type,
+        resolve: updateCardsSuccess.type,
+        reject: updateCardsFailure.type,
+      })
+      .asyncFunction({...card, checked: !checked} as Card)
+      .then(
+        () => setLoadingState(false),
+        () => showError(),
+      );
+  }, [card, checked, setLoadingState, showError]);
 
   return (
     <Swipeable
@@ -76,18 +75,20 @@ export const SwipeableCard: React.FC<Props> = ({
           style={styles.checkBox}
           disabled={false}
           value={checked}
-          onValueChange={() => checkCard(!checked)}
+          onValueChange={checkCard}
         />
-        <Text
-          style={{
-            ...styles.cardText,
-            textDecorationLine: checked ? 'line-through' : 'none',
-          }}>
-          {title}
-        </Text>
+        <View onTouchEnd={() => navigation.navigate('Card', {id: id})}>
+          <Text
+            style={{
+              ...styles.cardText,
+              textDecorationLine: checked ? 'line-through' : 'none',
+            }}>
+            {title}
+          </Text>
+        </View>
         <PeopleIcon />
         <Text style={styles.prayText}>3</Text>
-        <HandsIcon />
+        <HandsIcon backGround={false} />
         <Text style={styles.prayText}>123</Text>
       </View>
     </Swipeable>

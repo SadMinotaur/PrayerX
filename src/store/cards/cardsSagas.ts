@@ -32,7 +32,9 @@ export function* watchOnCards() {
 function* getAllCardsSaga() {
   try {
     const json: GetAllCardsDto[] = yield API.getCards();
-    yield put(getCardsSuccess(json));
+    yield put(
+      getCardsSuccess(json.map((v: GetAllCardsDto) => ({...v} as Card))),
+    );
   } catch (e) {
     yield put(getCardsFailure(e.toString()));
   }
@@ -41,7 +43,7 @@ function* getAllCardsSaga() {
 function* addCardsSaga(action: PayloadAction<PostCardDto>) {
   try {
     const json: PostCardDtoResp = yield API.createCard(action.payload);
-    yield put(createCardsSuccess({...json, commentsIds: []}));
+    yield put(createCardsSuccess({...json} as Card));
   } catch (e) {
     yield put(createCardsFailure(e.toString()));
   }
@@ -58,8 +60,8 @@ function* deleteCardSaga(action: PayloadAction<number>) {
 
 function* updateCardSaga(action: PayloadAction<Card>) {
   try {
-    const json = yield API.updateCard(action.payload);
-    yield put(updateCardsSuccess(json));
+    const json: PostCardDtoResp = yield API.updateCard(action.payload);
+    yield put(updateCardsSuccess({...json} as PostCardDtoResp));
   } catch (e) {
     yield put(updateCardsFailure(e.toString()));
   }

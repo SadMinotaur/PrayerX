@@ -1,46 +1,48 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  scrollView: {alignItems: 'center'},
-  container: {
-    paddingTop: 15,
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+  mainContainer: {backgroundColor: '#fff'},
   header: {
+    flex: 1,
+    height: 130,
+    padding: 17,
+    backgroundColor: '#BFB393',
+  },
+  headerIcons: {justifyContent: 'space-between', flexDirection: 'row'},
+  headerText: {
+    marginTop: 15,
+    color: '#fff',
+    fontFamily: 'SFUIText-Medium',
+    fontSize: 17,
+    lineHeight: 27,
+  },
+  lastPrayed: {
+    paddingLeft: 15,
+    flex: 1,
+    height: 50,
+    alignItems: 'center',
     flexDirection: 'row',
-    height: 64,
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E5E5',
+  },
+  lastPrayedText: {
+    color: '#514D47',
+    marginLeft: 15,
+    lineHeight: 20,
+    fontFamily: 'SFUIText-Medium',
+    fontSize: 17,
+  },
+  statsTable: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    height: 216,
+    backgroundColor: 'blue',
+  },
+  statsTableItem: {
+    height: 108,
+    width: '50%',
     backgroundColor: '#fff',
-  },
-  headerTitle: {
-    flex: 7,
-  },
-  headerAddIcon: {
-    flex: 1,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 25,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalInput: {
-    margin: 10,
-    width: 250,
-    borderWidth: 1,
-    borderRadius: 6,
     borderColor: '#E5E5E5',
+    borderLeftWidth: 0,
+    borderWidth: 1,
   },
 });

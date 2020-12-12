@@ -77,9 +77,7 @@ export const Board: React.FC = () => {
           <SettingsIcon onTap={() => setSettingsModalState(true)} />
         </View>
       </View>
-      <ScrollView
-        contentContainerStyle={styles.mainContainer}
-        style={styles.mainContainer}>
+      <ScrollView contentContainerStyle={styles.mainContainer}>
         <Tab.Navigator
           tabBarOptions={{
             tabStyle: {

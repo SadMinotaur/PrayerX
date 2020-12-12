@@ -12,14 +12,23 @@ import {
 } from '../../../store/cards/cardsAction';
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
+import {Card} from '../../../store/cards/cardsTypes';
 
 interface Props {
   idColumn: number;
 }
 
 export const MyPrayers: React.FC<Props> = ({idColumn}) => {
-  const colCards = useSelector((state: RootState) =>
-    state.cards.filter((v) => idColumn === v.columnId),
+  const colUncheckedCards = useSelector((state: RootState) =>
+    state.cards.filter(
+      (v: Card) => idColumn === v.columnId && v.checked === false,
+    ),
+  );
+
+  const colCheckedCards = useSelector((state: RootState) =>
+    state.cards.filter(
+      (v: Card) => idColumn === v.columnId && v.checked === true,
+    ),
   );
 
   const [cardsState, setCardsState] = useState(true);
@@ -27,7 +36,9 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
   const [cardName, setCardName] = useState('');
 
   const createCard = useCallback(() => {
-    if (cardName.trim() === '') return;
+    if (cardName.trim() === '') {
+      return;
+    }
     setLoadingState(true);
     promiseListener
       .createAsyncFunction({
@@ -66,36 +77,30 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
-        {colCards.map(
-          (card) =>
-            !card.checked && (
-              <SwipeableCard
-                card={card}
-                setLoadingState={setLoadingState}
-                showError={showError}
-                key={card.id}
-              />
-            ),
-        )}
+        {colUncheckedCards.map((card) => (
+          <SwipeableCard
+            card={card}
+            setLoadingState={setLoadingState}
+            showError={showError}
+            key={card.id}
+          />
+        ))}
         <TouchableOpacity
           style={styles.showAnsweredButton}
           onPress={() => setCardsState((ps) => !ps)}>
           <Text style={styles.showAnsweredText}>
-            {cardsState ? 'Show answered prayers' : 'Hide ansewred prayers'}
+            {cardsState ? 'Hide ansewred prayers' : 'Show answered prayers'}
           </Text>
         </TouchableOpacity>
         {cardsState &&
-          colCards.map(
-            (card) =>
-              card.checked && (
-                <SwipeableCard
-                  card={card}
-                  setLoadingState={setLoadingState}
-                  showError={showError}
-                  key={card.id}
-                />
-              ),
-          )}
+          colCheckedCards.map((card) => (
+            <SwipeableCard
+              card={card}
+              setLoadingState={setLoadingState}
+              showError={showError}
+              key={card.id}
+            />
+          ))}
       </ScrollView>
       <LoadingPopup state={loadingState} />
     </>

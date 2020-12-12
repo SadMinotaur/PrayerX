@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import {store} from './store/store';
 import {Title} from './common-components/Title';
 import {Login} from './screens/Login';
+import {CardScreen} from './screens/Card';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,13 @@ export const App: React.FC = () => (
             headerShown: false,
           }}
           component={Board}
+        />
+        <Stack.Screen
+          name="Card"
+          options={{
+            headerShown: false,
+          }}
+          component={CardScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
