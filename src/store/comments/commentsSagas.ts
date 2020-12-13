@@ -11,6 +11,7 @@ import {
   getCommentsRequest,
   getCommentsSuccess,
 } from './commentsAction';
+import {Comment} from './commentsTypes';
 
 export function* watchOnComments() {
   yield takeLatest(addCommentRequest, addColumnSaga);
@@ -33,9 +34,9 @@ function* addColumnSaga(
     const {idCard, name} = payloadAction.payload;
     const json: CreateCommentDtoResp = yield API.createComment(idCard, {
       body: name,
-      created: new Date().toISOString().substring(0, 10),
+      created: new Date().toISOString(),
     });
-    yield put(addCommentSuccess({...json}));
+    yield put(addCommentSuccess({...json} as Comment));
   } catch (e) {
     yield put(addCommentFailure(e.toString()));
   }

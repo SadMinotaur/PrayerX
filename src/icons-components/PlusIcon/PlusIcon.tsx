@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Image, View} from 'react-native';
 import Plus from './../../../assets/icons/plus.svg';

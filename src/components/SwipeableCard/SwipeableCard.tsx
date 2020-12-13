@@ -17,6 +17,11 @@ import {useNavigation} from '@react-navigation/native';
 import {HumanIcon} from '../../icons-components/HumanIcon';
 import {HandsIcon} from '../../icons-components/HandsIcon';
 import {LeftLine} from '../../icons-components/LeftLine';
+import {
+  getCommentsFailure,
+  getCommentsRequest,
+  getCommentsSuccess,
+} from '../../store/comments/commentsAction';
 
 interface Props {
   card: Card;
@@ -62,6 +67,22 @@ export const SwipeableCard: React.FC<Props> = ({
       );
   }, [card, checked, setLoadingState, showError]);
 
+  const onCardTap = useCallback(() => {
+    promiseListener
+      .createAsyncFunction({
+        start: getCommentsRequest.type,
+        resolve: getCommentsSuccess.type,
+        reject: getCommentsFailure.type,
+      })
+      .asyncFunction()
+      .then(
+        () => {
+          navigation.navigate('Card', {id: id});
+        },
+        () => showError(),
+      );
+  }, [id, navigation, showError]);
+
   return (
     <Swipeable
       renderRightActions={() => (
@@ -77,7 +98,7 @@ export const SwipeableCard: React.FC<Props> = ({
           value={checked}
           onValueChange={checkCard}
         />
-        <View onTouchEnd={() => navigation.navigate('Card', {id: id})}>
+        <View onTouchEnd={onCardTap}>
           <Text
             style={{
               ...styles.cardText,

@@ -3,7 +3,7 @@ import SettingsI from './../../../assets/icons/settings.svg';
 import {styles} from './styles';
 
 interface Props {
-  onTap: () => void;
+  onTap?: () => void;
 }
 
 export const SettingsIcon: React.FC<Props> = ({onTap}) => (

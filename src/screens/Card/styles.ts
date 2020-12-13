@@ -85,7 +85,7 @@ export const styles = StyleSheet.create({
     width: 38.45,
     height: 36,
     resizeMode: 'contain',
-    borderRadius: 20,
+    borderRadius: 10,
     marginRight: 10,
   },
   imagesContainer: {

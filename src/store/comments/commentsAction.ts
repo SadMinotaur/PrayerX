@@ -12,10 +12,10 @@ export interface AddCommentActionRequestPd {
   name: string;
 }
 export const addCommentRequest = createAction<AddCommentActionRequestPd>(
-  'ADD_COMMENTS_REQUEST',
+  'ADD_COMMENT_REQUEST',
 );
-export const addCommentSuccess = createAction<Comment>('ADD_COLUMN_SUCCESS');
-export const addCommentFailure = createAction<string>('ADD_COLUMN_FAILURE');
+export const addCommentSuccess = createAction<Comment>('ADD_COMMENT_SUCCESS');
+export const addCommentFailure = createAction<string>('ADD_COMMENT_FAILURE');
 
 // export const updateColumnRequest = createAction<Column>(
 //   'UPDATE_COLUMN_REQUEST',
