@@ -3,7 +3,7 @@ import {Text, View} from 'react-native';
 import {styles} from './styles';
 import {Swipeable} from 'react-native-gesture-handler';
 import CheckBox from '@react-native-community/checkbox';
-import {PeopleIcon} from '../../icons-components/PeopleIcon';
+import {HumanIcon} from '../../icons-components/HumanIcon';
 import {HandsIcon} from '../../icons-components/HandsIcon/HandsIcon';
 import {LeftLine} from '../../icons-components/LeftLine';
 import {Card} from '../../store/cards/cardsTypes';
@@ -86,7 +86,7 @@ export const SwipeableCard: React.FC<Props> = ({
             {title}
           </Text>
         </View>
-        <PeopleIcon />
+        <HumanIcon />
         <Text style={styles.prayText}>3</Text>
         <HandsIcon backGround={false} />
         <Text style={styles.prayText}>123</Text>

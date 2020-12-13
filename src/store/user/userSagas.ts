@@ -1,7 +1,7 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
-import {getColumnsRequest, getColumnsSuccess} from '../columns/columnsAction';
+import {getColumnsSuccess} from '../columns/columnsAction';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -28,7 +28,6 @@ function* signInUserSaga(payloadAction: PayloadAction<LoginActionRequestPd>) {
       password: password,
     });
     yield put(loginActionSuccess(json));
-    // yield put(getColumnsRequest());
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
   }

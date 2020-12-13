@@ -1,0 +1,1 @@
+export {CommentsIcon} from './CommentsIcon';
