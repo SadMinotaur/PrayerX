@@ -16,6 +16,10 @@ import {
   ColumnDtoCreate,
   ColumnDtoCreateResp,
 } from '../dto/columns/ColumnsDto';
+import {
+  CreateCommentDto,
+  CreateCommentDtoResp,
+} from '../dto/comments/CommentsDto';
 import {Card} from './cards/cardsTypes';
 
 class Api {
@@ -178,6 +182,25 @@ class Api {
       checked: card.checked,
       column: {},
     }).then((json: PostCardDtoResp) => {
+      this.containsError(json);
+      return json;
+    });
+  }
+
+  public async createComment(
+    idCard: number,
+    comment: CreateCommentDto,
+  ): Promise<CreateCommentDtoResp> {
+    return this.postRequest('cards/' + idCard + '/comments', comment).then(
+      (json: CreateCommentDtoResp) => {
+        this.containsError(json);
+        return json;
+      },
+    );
+  }
+
+  public async getComments(): Promise<any> {
+    return this.getRequest('/comments').then((json: any) => {
       this.containsError(json);
       return json;
     });

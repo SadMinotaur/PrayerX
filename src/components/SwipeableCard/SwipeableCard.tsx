@@ -3,9 +3,6 @@ import {Text, View} from 'react-native';
 import {styles} from './styles';
 import {Swipeable} from 'react-native-gesture-handler';
 import CheckBox from '@react-native-community/checkbox';
-import {HumanIcon} from '../../icons-components/HumanIcon';
-import {HandsIcon} from '../../icons-components/HandsIcon/HandsIcon';
-import {LeftLine} from '../../icons-components/LeftLine';
 import {Card} from '../../store/cards/cardsTypes';
 import {promiseListener} from '../../store/store';
 import {
@@ -17,6 +14,9 @@ import {
   updateCardsSuccess,
 } from '../../store/cards/cardsAction';
 import {useNavigation} from '@react-navigation/native';
+import {HumanIcon} from '../../icons-components/HumanIcon';
+import {HandsIcon} from '../../icons-components/HandsIcon';
+import {LeftLine} from '../../icons-components/LeftLine';
 
 interface Props {
   card: Card;

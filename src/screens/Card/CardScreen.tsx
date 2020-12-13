@@ -5,14 +5,14 @@ import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../store/store';
 import {styles} from './styles';
-import {HandsIcon} from '../../icons-components/HandsIcon';
-import {ArrowIcon} from '../../icons-components/ArrowIcon';
-import {LeftLine} from '../../icons-components/LeftLine';
 import {CardSelector} from '../../store/cards/cardsSelectors';
-import {PlusIcon} from '../../icons-components/PlusIcon';
 import {CardComment} from '../../components/CardComment';
-import {CommentsIcon} from '../../icons-components/CommentsIcon';
 import {TableItem} from '../../components/TableItem';
+import {ArrowIcon} from '../../icons-components/ArrowIcon';
+import {HandsIcon} from '../../icons-components/HandsIcon';
+import {LeftLine} from '../../icons-components/LeftLine';
+import {PlusIcon} from '../../icons-components/PlusIcon';
+import {CommentsIcon} from '../../icons-components/CommentsIcon';
 
 interface RouteProps {
   id: number;
@@ -24,7 +24,6 @@ export const CardScreen: React.FC = () => {
   const {card} = useSelector((state: RootState) =>
     CardSelector(state, {id: (route.params as RouteProps).id}),
   );
-
   return (
     <>
       <ScrollView style={styles.mainContainer}>
@@ -78,16 +77,6 @@ export const CardScreen: React.FC = () => {
           </View>
           <Text style={styles.membersText}>comments</Text>
         </View>
-        <CardComment
-          title={'Anna Barber'}
-          content={'Hey, Hey!'}
-          time={'2 days ago'}
-        />
-        <CardComment
-          title={'Anna Barber'}
-          content={'Hey, Hey!'}
-          time={'2 days ago'}
-        />
         <CardComment
           title={'Anna Barber'}
           content={'Hey, Hey!'}

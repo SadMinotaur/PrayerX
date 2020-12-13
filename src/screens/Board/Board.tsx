@@ -5,7 +5,6 @@ import {MyPrayers} from './MyPrayers';
 import {Alert, Text, View} from 'react-native';
 import {styles} from './styles';
 import {Title} from '../../common-components/Title';
-import {SettingsIcon} from '../../icons-components/SettingsIcon';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRoute} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -18,6 +17,7 @@ import {
   updateColumnSuccess,
 } from '../../store/columns/columnsAction';
 import {CurrentColumnSelector} from '../../store/columns/columnSelectors';
+import {SettingsIcon} from '../../icons-components/SettingsIcon';
 
 interface RouteProps {
   id: number;
