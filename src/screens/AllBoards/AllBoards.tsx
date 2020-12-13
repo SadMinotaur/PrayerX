@@ -77,7 +77,11 @@ export const AllBoards: React.FC = () => {
           <Title movedRight={true} name="My Desc" />
         </View>
         <View style={styles.headerAddIcon}>
-          <PlusIcon onTapEnd={() => setAddColModalState(true)} size={16} />
+          <PlusIcon
+            backGround={false}
+            onTapEnd={() => setAddColModalState(true)}
+            size={16}
+          />
         </View>
       </View>
       <ScrollView

@@ -12,30 +12,16 @@ import {
 } from '../../../store/cards/cardsAction';
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
-import {
-  ColumnCheckedCardsSelector,
-  ColumnUncheckedCardsSelector,
-} from '../../../store/columns/columnSelectors';
-import {useRoute} from '@react-navigation/native';
+import {ColumnCheckedCardsSelector} from '../../../store/columns/columnSelectors';
 
 interface Props {
   idColumn: number;
 }
 
-interface RouteProps {
-  id: number;
-}
-
 export const MyPrayers: React.FC<Props> = ({idColumn}) => {
-  const route = useRoute();
-  const {cardsChecked} = useSelector((state: RootState) =>
+  const {cardsChecked, cardsUnchecked} = useSelector((state: RootState) =>
     ColumnCheckedCardsSelector(state, {
-      idColumn: (route.params as RouteProps).id,
-    }),
-  );
-  const {cardsUnchecked} = useSelector((state: RootState) =>
-    ColumnUncheckedCardsSelector(state, {
-      idColumn: (route.params as RouteProps).id,
+      idColumn: idColumn,
     }),
   );
 
@@ -77,7 +63,12 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
         contentContainerStyle={styles.containerAlign}
         style={styles.container}>
         <View style={styles.textInputBorder}>
-          <PlusIcon onTapEnd={createCard} marginTop={14} size={19} />
+          <PlusIcon
+            backGround={false}
+            onTapEnd={createCard}
+            marginTop={14}
+            size={19}
+          />
           <TextInput
             style={styles.textInput}
             placeholder={'Add a prayer...'}
@@ -85,7 +76,7 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
-        {cardsChecked.map((card) => (
+        {cardsUnchecked.map((card) => (
           <SwipeableCard
             card={card}
             setLoadingState={setLoadingState}
@@ -101,7 +92,7 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
           </Text>
         </TouchableOpacity>
         {cardsState &&
-          cardsUnchecked.map((card) => (
+          cardsChecked.map((card) => (
             <SwipeableCard
               card={card}
               setLoadingState={setLoadingState}
@@ -109,6 +100,19 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
               key={card.id}
             />
           ))}
+        {/* {cardsState && (
+          <FlatList
+            data={cardsChecked}
+            renderItem={({item}) => (
+              <SwipeableCard
+                card={item}
+                setLoadingState={setLoadingState}
+                showError={showError}
+                key={item.id}
+              />
+            )}
+          />
+        )} */}
       </ScrollView>
       <LoadingPopup state={loadingState} />
     </>
