@@ -2,7 +2,6 @@ import React, {useCallback, useState} from 'react';
 import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import {LoadingPopup} from '../../../common-components/LoadingPopup';
 import {SwipeableCard} from '../../../components/SwipeableCard';
 import {
   createCardsFailure,
@@ -26,14 +25,12 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
   );
 
   const [cardsState, setCardsState] = useState(true);
-  const [loadingState, setLoadingState] = useState(false);
   const [cardName, setCardName] = useState('');
 
   const createCard = useCallback(() => {
     if (cardName.trim() === '') {
       return;
     }
-    setLoadingState(true);
     promiseListener
       .createAsyncFunction({
         start: createCardsRequest.type,
@@ -47,14 +44,13 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
         column: idColumn,
       })
       .then(
-        () => setLoadingState(false),
+        () => {},
         () => showError(),
       );
   }, [idColumn, cardName]);
 
   function showError(): void {
     Alert.alert('Something went wrong!');
-    setLoadingState(false);
   }
 
   return (
@@ -76,13 +72,9 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
+
         {cardsUnchecked.map((card) => (
-          <SwipeableCard
-            card={card}
-            setLoadingState={setLoadingState}
-            showError={showError}
-            key={card.id}
-          />
+          <SwipeableCard card={card} showError={showError} key={card.id} />
         ))}
         <TouchableOpacity
           style={styles.showAnsweredButton}
@@ -93,28 +85,9 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
         </TouchableOpacity>
         {cardsState &&
           cardsChecked.map((card) => (
-            <SwipeableCard
-              card={card}
-              setLoadingState={setLoadingState}
-              showError={showError}
-              key={card.id}
-            />
+            <SwipeableCard card={card} showError={showError} key={card.id} />
           ))}
-        {/* {cardsState && (
-          <FlatList
-            data={cardsChecked}
-            renderItem={({item}) => (
-              <SwipeableCard
-                card={item}
-                setLoadingState={setLoadingState}
-                showError={showError}
-                key={item.id}
-              />
-            )}
-          />
-        )} */}
       </ScrollView>
-      <LoadingPopup state={loadingState} />
     </>
   );
 };

@@ -13,7 +13,6 @@ import {HandsIcon} from '../../icons-components/HandsIcon';
 import {LeftLine} from '../../icons-components/LeftLine';
 import {PlusIcon} from '../../icons-components/PlusIcon';
 import {CommentsIcon} from '../../icons-components/CommentsIcon';
-import {Comment} from '../../store/comments/commentsTypes';
 import {
   AddCommentActionRequestPd,
   addCommentFailure,
@@ -105,18 +104,18 @@ export const CardScreen: React.FC = () => {
               style={styles.image}
               source={require('./../../../assets/people/erfer.png')}
             />
-            <PlusIcon backGround={true} size={37} />
+            <PlusIcon backGround={true} size={36} />
           </View>
           <Text style={styles.membersText}>comments</Text>
         </View>
-        {comments.map((v: Comment) => (
+        {comments.map(({id: cardId, body, created}) => (
           <CardComment
-            key={v.id}
-            id={v.id}
+            key={cardId}
+            id={cardId}
             // We cant get access to users cards anyway
             title={user}
-            content={v.body}
-            created={v.created}
+            content={body}
+            created={created}
           />
         ))}
         <View style={styles.addCommentsView}>

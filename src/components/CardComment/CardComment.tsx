@@ -51,9 +51,7 @@ export const CardComment: React.FC<Props> = ({id, title, content, created}) => {
       })
       .asyncFunction(id)
       .then(
-        () => {
-          console.log('deleted');
-        },
+        () => {},
         () => showError(),
       );
   }, [id]);
@@ -64,7 +62,7 @@ export const CardComment: React.FC<Props> = ({id, title, content, created}) => {
 
   function diffInTime(): string {
     const diffTime = Math.abs(Date.now() - Date.parse(created));
-    const val: number = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const val: number = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     return val.toString() + (val === 1 ? ' day' : ' days') + ' ago';
   }
 

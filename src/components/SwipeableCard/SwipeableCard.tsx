@@ -27,15 +27,10 @@ import {TextInput} from 'react-native-gesture-handler';
 
 interface Props {
   card: Card;
-  setLoadingState: (bool: boolean) => void;
   showError: () => void;
 }
 
-export const SwipeableCard: React.FC<Props> = ({
-  card,
-  setLoadingState,
-  showError,
-}) => {
+export const SwipeableCard: React.FC<Props> = ({card, showError}) => {
   const {id, title, checked} = card;
   const navigation = useNavigation();
 
@@ -43,7 +38,6 @@ export const SwipeableCard: React.FC<Props> = ({
   const [updateInput, setUpdateInput] = useState(title);
 
   const deleteCard = useCallback(() => {
-    setLoadingState(true);
     promiseListener
       .createAsyncFunction({
         start: deleteCardsRequest.type,
@@ -52,14 +46,13 @@ export const SwipeableCard: React.FC<Props> = ({
       })
       .asyncFunction(id)
       .then(
-        () => setLoadingState(false),
+        () => {},
         () => showError(),
       );
-  }, [id, setLoadingState, showError]);
+  }, [id, showError]);
 
   const updateCard = useCallback(
     (bool: boolean) => {
-      setLoadingState(true);
       promiseListener
         .createAsyncFunction({
           start: updateCardsRequest.type,
@@ -72,15 +65,14 @@ export const SwipeableCard: React.FC<Props> = ({
           checked: bool,
         } as Card)
         .then(
-          () => setLoadingState(false),
+          () => {},
           () => showError(),
         );
     },
-    [card, setLoadingState, showError, updateInput],
+    [card, showError, updateInput],
   );
 
   const onCardTap = useCallback(() => {
-    setLoadingState(true);
     promiseListener
       .createAsyncFunction({
         start: getCommentsRequest.type,
@@ -90,12 +82,11 @@ export const SwipeableCard: React.FC<Props> = ({
       .asyncFunction()
       .then(
         () => {
-          setLoadingState(false);
           navigation.navigate('Card', {id: id});
         },
         () => showError(),
       );
-  }, [id, navigation, setLoadingState, showError]);
+  }, [id, navigation, showError]);
 
   return (
     <Swipeable
@@ -112,40 +103,42 @@ export const SwipeableCard: React.FC<Props> = ({
         </View>
       )}>
       <View style={styles.swipeContainer}>
-        <LeftLine />
-        <CheckBox
-          style={styles.checkBox}
-          disabled={false}
-          value={checked}
-          onValueChange={() => updateCard(true)}
-        />
-        {inputState ? (
-          <TextInput
-            style={styles.input}
-            autoCompleteType="name"
-            placeholder={'Card name'}
-            value={updateInput}
-            onChangeText={setUpdateInput}
-            onBlur={() => {
-              updateCard(false);
-              setInputState(false);
-            }}
+        <View style={styles.viewRow}>
+          <LeftLine />
+          <CheckBox
+            style={styles.checkBox}
+            disabled={false}
+            value={checked}
+            onValueChange={() => updateCard(true)}
           />
-        ) : (
-          <View onTouchEnd={onCardTap}>
-            <Text
-              style={{
-                ...styles.cardText,
-                textDecorationLine: checked ? 'line-through' : 'none',
-              }}>
-              {updateInput}
-            </Text>
-          </View>
-        )}
-        <HumanIcon />
-        <Text style={styles.prayText}>3</Text>
-        <HandsIcon backGround={false} />
-        <Text style={styles.prayText}>123</Text>
+          {inputState ? (
+            <TextInput
+              autoCompleteType="name"
+              placeholder={'Card name'}
+              value={updateInput}
+              onChangeText={setUpdateInput}
+              onBlur={() => {
+                updateCard(false);
+                setInputState(false);
+              }}
+            />
+          ) : (
+            <View onTouchEnd={onCardTap}>
+              <Text
+                style={{
+                  textDecorationLine: checked ? 'line-through' : 'none',
+                }}>
+                {updateInput}
+              </Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.viewRow}>
+          <HumanIcon />
+          <Text style={styles.prayText}>3</Text>
+          <HandsIcon backGround={false} />
+          <Text style={styles.prayText}>123</Text>
+        </View>
       </View>
     </Swipeable>
   );

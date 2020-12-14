@@ -1,11 +1,13 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  containerAlign: {alignItems: 'center'},
+  containerAlign: {},
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 15,
+    paddingLeft: 15,
+    paddingTop: 15,
+    paddingRight: 15,
   },
   textInput: {
     fontFamily: 'SFUIText-Light',
@@ -27,6 +29,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#BFB393',
     borderRadius: 15,
     margin: 20,
+    alignSelf: 'center',
   },
   showAnsweredText: {
     color: '#fff',
@@ -35,4 +38,5 @@ export const styles = StyleSheet.create({
     lineHeight: 14.32,
     fontFamily: 'SFUIText-Medium',
   },
+  cardContainer: {alignItems: 'center'},
 });

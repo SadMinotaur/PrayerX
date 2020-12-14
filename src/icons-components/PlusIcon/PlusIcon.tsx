@@ -5,13 +5,13 @@ import Plus from './../../../assets/icons/plus.svg';
 
 interface Props {
   size: number;
+  backGround: boolean;
   marginTop?: number;
   onTapEnd?: () => void;
-  backGround: boolean;
 }
 
 export const PlusIcon: React.FC<Props> = ({
-  onTapEnd: onTapEnd,
+  onTapEnd,
   size,
   marginTop,
   backGround,

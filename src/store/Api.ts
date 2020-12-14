@@ -157,7 +157,7 @@ class Api {
 
   // Not required in task
   public async deleteColumn(id: number) {
-    this.deleteRequest('columns/' + id);
+    return this.deleteRequest('columns/' + id);
   }
 
   public async getCards(): Promise<GetAllCardsDto[]> {
@@ -172,7 +172,7 @@ class Api {
   }
 
   public async deleteCard(cardId: number) {
-    this.deleteRequest('cards/' + cardId);
+    return this.deleteRequest('cards/' + cardId);
   }
 
   public async updateCard(card: Card): Promise<PostCardDtoResp> {
@@ -196,7 +196,7 @@ class Api {
   }
 
   public async deleteComment(commentId: number) {
-    this.deleteRequest('comments/' + commentId);
+    return this.deleteRequest('comments/' + commentId);
   }
 
   public async updateComment(
