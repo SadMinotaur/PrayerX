@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   AuthSignUpReqDto,
   AuthSignUpSuccessDto,
@@ -29,6 +30,12 @@ class Api {
 
   constructor(baseUrl: string) {
     this.urlBase = baseUrl;
+    AsyncStorage.getItem('token').then((v) => {
+      if (v !== null) {
+        console.log(v);
+        this.token = v;
+      }
+    });
   }
 
   private containsError(json: any) {
@@ -111,6 +118,7 @@ class Api {
     return this.postRequest('auth/sign-in', user).then(
       (json: AuthSignInSuccessDto) => {
         this.token = json.token;
+        AsyncStorage.setItem('token', this.token);
         return json;
       },
     );
@@ -120,6 +128,7 @@ class Api {
     return this.postRequest('auth/sign-up', user).then(
       (json: AuthSignUpSuccessDto) => {
         this.token = json.token;
+        AsyncStorage.setItem('token', this.token);
         return json;
       },
     );
@@ -148,7 +157,7 @@ class Api {
 
   // Not required in task
   public async deleteColumn(id: number) {
-    return this.deleteRequest('columns/' + id);
+    this.deleteRequest('columns/' + id);
   }
 
   public async getCards(): Promise<GetAllCardsDto[]> {
@@ -162,8 +171,8 @@ class Api {
     });
   }
 
-  public async deleteCard(cardId: number): Promise<any> {
-    return this.deleteRequest('cards/' + cardId);
+  public async deleteCard(cardId: number) {
+    this.deleteRequest('cards/' + cardId);
   }
 
   public async updateCard(card: Card): Promise<PostCardDtoResp> {
@@ -184,6 +193,20 @@ class Api {
 
   public async getComments(): Promise<Comment[]> {
     return this.getRequest('comments/');
+  }
+
+  public async deleteComment(commentId: number) {
+    this.deleteRequest('comments/' + commentId);
+  }
+
+  public async updateComment(
+    id: number,
+    comment: CreateCommentDto,
+  ): Promise<Comment> {
+    return this.updateRequest('comments/' + id, {
+      body: comment.body,
+      created: comment.created,
+    });
   }
 }
 

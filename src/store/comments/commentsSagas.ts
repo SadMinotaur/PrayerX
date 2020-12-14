@@ -10,15 +10,24 @@ import {
   getCommentsFailure,
   getCommentsRequest,
   getCommentsSuccess,
+  updateCommentRequest,
+  updateCommentSuccess,
+  updateCommentFailure,
+  deleteCommentRequest,
+  deleteCommentSuccess,
+  deleteCommentFailure,
+  UpdateCommentRequestPd,
 } from './commentsAction';
 import {Comment} from './commentsTypes';
 
 export function* watchOnComments() {
-  yield takeLatest(addCommentRequest, addColumnSaga);
-  yield takeLatest(getCommentsRequest, getColumnsSaga);
+  yield takeLatest(addCommentRequest, addComments);
+  yield takeLatest(getCommentsRequest, getComments);
+  yield takeLatest(updateCommentRequest, updateComments);
+  yield takeLatest(deleteCommentRequest, deleteComments);
 }
 
-function* getColumnsSaga() {
+function* getComments() {
   try {
     const json: Comment[] = yield API.getComments();
     yield put(getCommentsSuccess(json));
@@ -27,17 +36,37 @@ function* getColumnsSaga() {
   }
 }
 
-function* addColumnSaga(
-  payloadAction: PayloadAction<AddCommentActionRequestPd>,
-) {
+function* addComments(payloadAction: PayloadAction<AddCommentActionRequestPd>) {
   try {
-    const {idCard, name} = payloadAction.payload;
+    const {idCard, body} = payloadAction.payload;
     const json: CreateCommentDtoResp = yield API.createComment(idCard, {
-      body: name,
+      body: body,
       created: new Date().toISOString(),
     });
     yield put(addCommentSuccess({...json} as Comment));
   } catch (e) {
     yield put(addCommentFailure(e.toString()));
+  }
+}
+
+function* updateComments(payloadAction: PayloadAction<UpdateCommentRequestPd>) {
+  try {
+    const {id, body, created} = payloadAction.payload;
+    const json: Comment = yield API.updateComment(id, {
+      body: body,
+      created: created,
+    });
+    yield put(updateCommentSuccess(json));
+  } catch (e) {
+    yield put(updateCommentFailure(e.toString()));
+  }
+}
+
+function* deleteComments(payloadAction: PayloadAction<number>) {
+  try {
+    yield API.deleteComment(payloadAction.payload);
+    yield put(deleteCommentSuccess(payloadAction.payload));
+  } catch (e) {
+    yield put(deleteCommentFailure(e.toString()));
   }
 }

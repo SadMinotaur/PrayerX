@@ -44,7 +44,7 @@ export const CardScreen: React.FC = () => {
       })
       .asyncFunction({
         idCard: id,
-        name: inputState,
+        body: inputState,
       } as AddCommentActionRequestPd)
       .then(
         () => {},
@@ -54,12 +54,6 @@ export const CardScreen: React.FC = () => {
 
   function showError(): void {
     Alert.alert('Something went wrong!');
-  }
-
-  function diffInTime(comment: Comment): string {
-    const diffTime = Math.abs(Date.now() - Date.parse(comment.created));
-    const val: number = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return val.toString() + (val === 1 ? ' day' : ' days') + ' ago';
   }
 
   return (
@@ -96,8 +90,8 @@ export const CardScreen: React.FC = () => {
           />
           <TableItem
             bottom={true}
-            topText={'60'}
-            bodyText={'Times Prayed by Others'}
+            topText={comments.length.toString()}
+            bodyText={'Comments count'}
           />
         </View>
         <View style={styles.membersContainer}>
@@ -118,10 +112,11 @@ export const CardScreen: React.FC = () => {
         {comments.map((v: Comment) => (
           <CardComment
             key={v.id}
+            id={v.id}
             // We cant get access to users cards anyway
             title={user}
             content={v.body}
-            time={diffInTime(v)}
+            created={v.created}
           />
         ))}
         <View style={styles.addCommentsView}>

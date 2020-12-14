@@ -17,12 +17,12 @@ import {
 import {Column} from './columnsTypes';
 
 export function* watchOnColumns() {
-  yield takeLatest(getColumnsRequest, getColumnsSaga);
-  yield takeLatest(addColumnRequest, addColumnSaga);
-  yield takeLatest(updateColumnRequest, updateColumnSaga);
+  yield takeLatest(getColumnsRequest, getColumns);
+  yield takeLatest(addColumnRequest, addColumn);
+  yield takeLatest(updateColumnRequest, updateColumn);
 }
 
-function* getColumnsSaga() {
+function* getColumns() {
   try {
     const json: Column[] = yield API.getColumns();
     yield put(getColumnsSuccess(json));
@@ -31,9 +31,7 @@ function* getColumnsSaga() {
   }
 }
 
-function* addColumnSaga(
-  payloadAction: PayloadAction<addColumnActionRequestPd>,
-) {
+function* addColumn(payloadAction: PayloadAction<addColumnActionRequestPd>) {
   try {
     const json: ColumnDtoCreateResp = yield API.addColumn({
       title: payloadAction.payload.name,
@@ -51,7 +49,7 @@ function* addColumnSaga(
   }
 }
 
-function* updateColumnSaga(payloadAction: PayloadAction<Column>) {
+function* updateColumn(payloadAction: PayloadAction<Column>) {
   try {
     const {id, title, description} = payloadAction.payload;
     const json: ColumnDtoCreateResp = yield API.updateColumn(id, {
