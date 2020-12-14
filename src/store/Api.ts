@@ -21,6 +21,7 @@ import {
   CreateCommentDtoResp,
 } from '../dto/comments/CommentsDto';
 import {Card} from './cards/cardsTypes';
+import {Comment} from './comments/commentsTypes';
 
 class Api {
   private urlBase: string;
@@ -181,7 +182,7 @@ class Api {
     return this.postRequest('cards/' + idCard + '/comments', comment);
   }
 
-  public async getComments(): Promise<any> {
+  public async getComments(): Promise<Comment[]> {
     return this.getRequest('comments/');
   }
 }

@@ -34,8 +34,7 @@ export const store = createStore(
     applyMiddleware(reduxPromiseListener.middleware, sagaMiddleware, logger),
   ),
 );
-persistStore(store);
-sagaMiddleware.run(rootSaga);
+export const persistor = persistStore(store);
 export const promiseListener = reduxPromiseListener;
 
-// AsyncStorage.clear();
+sagaMiddleware.run(rootSaga);

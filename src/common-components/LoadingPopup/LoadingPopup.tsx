@@ -4,14 +4,15 @@ import {styles} from './styles';
 
 interface Props {
   state: boolean;
+  text?: string;
 }
 
-export const LoadingPopup: React.FC<Props> = ({state}) => {
+export const LoadingPopup: React.FC<Props> = ({state, text}) => {
   return (
     <Modal animationType="slide" transparent={true} visible={state}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text>Waiting response...</Text>
+          <Text>{text ? text : 'Waiting response...'}</Text>
         </View>
       </View>
     </Modal>

@@ -68,6 +68,7 @@ export const SwipeableCard: React.FC<Props> = ({
   }, [card, checked, setLoadingState, showError]);
 
   const onCardTap = useCallback(() => {
+    setLoadingState(true);
     promiseListener
       .createAsyncFunction({
         start: getCommentsRequest.type,
@@ -77,11 +78,12 @@ export const SwipeableCard: React.FC<Props> = ({
       .asyncFunction()
       .then(
         () => {
+          setLoadingState(false);
           navigation.navigate('Card', {id: id});
         },
         () => showError(),
       );
-  }, [id, navigation, showError]);
+  }, [id, navigation, setLoadingState, showError]);
 
   return (
     <Swipeable

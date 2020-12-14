@@ -20,7 +20,7 @@ export function* watchOnComments() {
 
 function* getColumnsSaga() {
   try {
-    const json = yield API.getComments();
+    const json: Comment[] = yield API.getComments();
     yield put(getCommentsSuccess(json));
   } catch (e) {
     yield put(getCommentsFailure(e.toString()));

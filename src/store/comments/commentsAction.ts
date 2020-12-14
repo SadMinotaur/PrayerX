@@ -16,14 +16,3 @@ export const addCommentRequest = createAction<AddCommentActionRequestPd>(
 );
 export const addCommentSuccess = createAction<Comment>('ADD_COMMENT_SUCCESS');
 export const addCommentFailure = createAction<string>('ADD_COMMENT_FAILURE');
-
-// export const updateColumnRequest = createAction<Column>(
-//   'UPDATE_COLUMN_REQUEST',
-// );
-
-// export const updateColumnSuccess = createAction<Column>(
-//   'UPDATE_COLUMN_SUCCESS',
-// );
-// export const updateColumnFailure = createAction<string>(
-//   'UPDATE_COLUMN_FAILURE',
-// );
