@@ -3,7 +3,6 @@ import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import {LoadingPopup} from '../../../common-components/LoadingPopup';
-import {PlusIcon} from '../../../icons-components/PlusIcon';
 import {SwipeableCard} from '../../../components/SwipeableCard';
 import {
   createCardsFailure,
@@ -13,6 +12,7 @@ import {
 import {promiseListener, RootState} from '../../../store/store';
 import {styles} from './styles';
 import {ColumnCheckedCardsSelector} from '../../../store/columns/columnSelectors';
+import {PlusIcon} from '../../../icons-components/PlusIcon';
 
 interface Props {
   idColumn: number;

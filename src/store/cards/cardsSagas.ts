@@ -23,13 +23,13 @@ import {
 import {Card} from './cardsTypes';
 
 export function* watchOnCards() {
-  yield takeLatest(getCardsRequest, getAllCardsSaga);
-  yield takeLatest(createCardsRequest, addCardsSaga);
-  yield takeLatest(deleteCardsRequest, deleteCardSaga);
-  yield takeLatest(updateCardsRequest, updateCardSaga);
+  yield takeLatest(getCardsRequest, getAllCards);
+  yield takeLatest(createCardsRequest, addCards);
+  yield takeLatest(deleteCardsRequest, deleteCard);
+  yield takeLatest(updateCardsRequest, updateCard);
 }
 
-function* getAllCardsSaga() {
+function* getAllCards() {
   try {
     const json: GetAllCardsDto[] = yield API.getCards();
     yield put(
@@ -40,7 +40,7 @@ function* getAllCardsSaga() {
   }
 }
 
-function* addCardsSaga(action: PayloadAction<PostCardDto>) {
+function* addCards(action: PayloadAction<PostCardDto>) {
   try {
     const json: PostCardDtoResp = yield API.createCard(action.payload);
     yield put(createCardsSuccess({...json} as Card));
@@ -49,7 +49,7 @@ function* addCardsSaga(action: PayloadAction<PostCardDto>) {
   }
 }
 
-function* deleteCardSaga(action: PayloadAction<number>) {
+function* deleteCard(action: PayloadAction<number>) {
   try {
     yield API.deleteCard(action.payload);
     yield put(deleteCardsSuccess(action.payload));
@@ -58,7 +58,7 @@ function* deleteCardSaga(action: PayloadAction<number>) {
   }
 }
 
-function* updateCardSaga(action: PayloadAction<Card>) {
+function* updateCard(action: PayloadAction<Card>) {
   try {
     const json: PostCardDtoResp = yield API.updateCard(action.payload);
     yield put(updateCardsSuccess({...json} as PostCardDtoResp));

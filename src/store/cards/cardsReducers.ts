@@ -19,14 +19,11 @@ export const cardsReducer = createReducer([] as Card[], (builder) => {
       state.filter((v: Card) => v.id !== action.payload),
     )
     .addCase(updateCardsSuccess, (state: Card[], action) => {
-      const {id, title, checked, description} = action.payload;
+      const {id} = action.payload;
       return state.map((v: Card) =>
         v.id === id
           ? {
-              id: id,
-              checked: checked,
-              description: description,
-              title: title,
+              ...action.payload,
               columnId: v.columnId,
             }
           : v,

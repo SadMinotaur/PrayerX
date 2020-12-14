@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert, Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector} from 'react-redux';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {Title} from '../../common-components/Title';
 import {
@@ -10,7 +11,7 @@ import {
   getColumnsRequest,
   getColumnsSuccess,
 } from '../../store/columns/columnsAction';
-import {promiseListener} from '../../store/store';
+import {promiseListener, RootState} from '../../store/store';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -26,6 +27,7 @@ export const Login: React.FC = () => {
   const {register, handleSubmit, setValue} = useForm();
   const [isSignInState, setIsSignInState] = useState(false);
   const [waitingPopupState, setPopupState] = useState(false);
+  const user = useSelector((state: RootState) => state.user.id);
 
   const signIn = useCallback(
     (formData: any) => {
@@ -111,7 +113,11 @@ export const Login: React.FC = () => {
     register('email');
     register('password');
     register('name');
-  }, [register]);
+    if (user !== -1) {
+      navigation.navigate('MyDesc', {});
+    }
+    return () => {};
+  }, [navigation, register, user]);
 
   return (
     <>

@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {Image, Text, View} from 'react-native';
+import {Alert, Image, Text, View} from 'react-native';
 import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../store/store';
+import {promiseListener, RootState} from '../../store/store';
 import {styles} from './styles';
-import {HandsIcon} from '../../icons-components/HandsIcon';
-import {ArrowIcon} from '../../icons-components/ArrowIcon';
-import {LeftLine} from '../../icons-components/LeftLine';
 import {CardSelector} from '../../store/cards/cardsSelectors';
-import {PlusIcon} from '../../icons-components/PlusIcon';
 import {CardComment} from '../../components/CardComment';
-import {CommentsIcon} from '../../icons-components/CommentsIcon';
 import {TableItem} from '../../components/TableItem';
+import {ArrowIcon} from '../../icons-components/ArrowIcon';
+import {HandsIcon} from '../../icons-components/HandsIcon';
+import {LeftLine} from '../../icons-components/LeftLine';
+import {PlusIcon} from '../../icons-components/PlusIcon';
+import {CommentsIcon} from '../../icons-components/CommentsIcon';
+import {Comment} from '../../store/comments/commentsTypes';
+import {
+  AddCommentActionRequestPd,
+  addCommentFailure,
+  addCommentRequest,
+  addCommentSuccess,
+} from '../../store/comments/commentsAction';
 
 interface RouteProps {
   id: number;
@@ -21,9 +28,33 @@ interface RouteProps {
 export const CardScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const {card} = useSelector((state: RootState) =>
-    CardSelector(state, {id: (route.params as RouteProps).id}),
+  const id = (route.params as RouteProps).id;
+  const {comments, user} = useSelector((state: RootState) =>
+    CardSelector(state, {id: id}),
   );
+
+  const [inputState, setInputState] = useState('');
+
+  const createComment = useCallback(() => {
+    promiseListener
+      .createAsyncFunction({
+        start: addCommentRequest.type,
+        resolve: addCommentSuccess.type,
+        reject: addCommentFailure.type,
+      })
+      .asyncFunction({
+        idCard: id,
+        body: inputState,
+      } as AddCommentActionRequestPd)
+      .then(
+        () => {},
+        () => showError(),
+      );
+  }, [id, inputState]);
+
+  function showError(): void {
+    Alert.alert('Something went wrong!');
+  }
 
   return (
     <>
@@ -59,8 +90,8 @@ export const CardScreen: React.FC = () => {
           />
           <TableItem
             bottom={true}
-            topText={'60'}
-            bodyText={'Times Prayed by Others'}
+            topText={comments.length.toString()}
+            bodyText={'Comments count'}
           />
         </View>
         <View style={styles.membersContainer}>
@@ -78,24 +109,21 @@ export const CardScreen: React.FC = () => {
           </View>
           <Text style={styles.membersText}>comments</Text>
         </View>
-        <CardComment
-          title={'Anna Barber'}
-          content={'Hey, Hey!'}
-          time={'2 days ago'}
-        />
-        <CardComment
-          title={'Anna Barber'}
-          content={'Hey, Hey!'}
-          time={'2 days ago'}
-        />
-        <CardComment
-          title={'Anna Barber'}
-          content={'Hey, Hey!'}
-          time={'2 days ago'}
-        />
+        {comments.map((v: Comment) => (
+          <CardComment
+            key={v.id}
+            id={v.id}
+            // We cant get access to users cards anyway
+            title={user}
+            content={v.body}
+            created={v.created}
+          />
+        ))}
         <View style={styles.addCommentsView}>
-          <CommentsIcon onTouchEnd={() => {}} />
+          <CommentsIcon onTouchEnd={createComment} />
           <TextInput
+            value={inputState}
+            onChangeText={setInputState}
             autoCompleteType={'name'}
             placeholder={'Add a comment...'}
             style={styles.textInput}

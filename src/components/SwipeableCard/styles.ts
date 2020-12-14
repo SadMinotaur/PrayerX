@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     height: 20,
     marginRight: 10,
   },
+  input: {width: 160, marginRight: 10},
   prayText: {
     marginLeft: 5,
     marginRight: 2,
@@ -27,7 +28,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  swipeDeleteText: {
+  swipeUpdate: {
+    display: 'flex',
+    width: 80,
+    height: 68,
+    backgroundColor: '#72A8BC',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  swipeText: {
     fontSize: 13,
     lineHeight: 15.23,
     fontFamily: 'SFUIText-Medium',
