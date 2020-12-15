@@ -1,4 +1,5 @@
 import {createAction} from '@reduxjs/toolkit';
+import {Column} from '../columns/columnsTypes';
 
 export interface LoginActionRequestPd {
   email: string;
@@ -27,6 +28,7 @@ export interface RegActionSuccessPd {
   id: number;
   email: string;
   name: string;
+  columns: Column[];
 }
 export const regActionSuccess = createAction<RegActionSuccessPd>(
   'REG_USER_SUCCESS',

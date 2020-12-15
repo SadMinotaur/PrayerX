@@ -1,14 +1,10 @@
 import React, {useCallback, useState} from 'react';
-import {Text, TouchableOpacity, View, ScrollView, Alert} from 'react-native';
+import {Text, TouchableOpacity, View, ScrollView} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {SwipeableCard} from '../../../components/SwipeableCard';
-import {
-  createCardsFailure,
-  createCardsRequest,
-  createCardsSuccess,
-} from '../../../store/cards/cardsAction';
-import {promiseListener, RootState} from '../../../store/store';
+import {createCardsRequest} from '../../../store/cards/cardsAction';
+import {RootState} from '../../../store/store';
 import {styles} from './styles';
 import {ColumnCheckedCardsSelector} from '../../../store/columns/columnSelectors';
 import {PlusIcon} from '../../../icons-components/PlusIcon';
@@ -18,9 +14,11 @@ interface Props {
 }
 
 export const MyPrayers: React.FC<Props> = ({idColumn}) => {
+  const dispatch = useDispatch();
+
   const {cardsChecked, cardsUnchecked} = useSelector((state: RootState) =>
     ColumnCheckedCardsSelector(state, {
-      idColumn: idColumn,
+      idColumn,
     }),
   );
 
@@ -31,27 +29,15 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
     if (cardName.trim() === '') {
       return;
     }
-    promiseListener
-      .createAsyncFunction({
-        start: createCardsRequest.type,
-        resolve: createCardsSuccess.type,
-        reject: createCardsFailure.type,
-      })
-      .asyncFunction({
+    dispatch(
+      createCardsRequest({
         title: cardName,
         description: '',
         checked: false,
         column: idColumn,
-      })
-      .then(
-        () => {},
-        () => showError(),
-      );
-  }, [idColumn, cardName]);
-
-  function showError(): void {
-    Alert.alert('Something went wrong!');
-  }
+      }),
+    );
+  }, [cardName, dispatch, idColumn]);
 
   return (
     <>
@@ -72,9 +58,8 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
             onChangeText={setCardName}
           />
         </View>
-
         {cardsUnchecked.map((card) => (
-          <SwipeableCard card={card} showError={showError} key={card.id} />
+          <SwipeableCard card={card} key={card.id} />
         ))}
         <TouchableOpacity
           style={styles.showAnsweredButton}
@@ -85,7 +70,7 @@ export const MyPrayers: React.FC<Props> = ({idColumn}) => {
         </TouchableOpacity>
         {cardsState &&
           cardsChecked.map((card) => (
-            <SwipeableCard card={card} showError={showError} key={card.id} />
+            <SwipeableCard card={card} key={card.id} />
           ))}
       </ScrollView>
     </>

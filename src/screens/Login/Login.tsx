@@ -3,14 +3,10 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {Alert, Button, ScrollView, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {LoadingPopup} from '../../common-components/LoadingPopup';
 import {Title} from '../../common-components/Title';
-import {
-  getColumnsFailure,
-  getColumnsRequest,
-  getColumnsSuccess,
-} from '../../store/columns/columnsAction';
+import {getColumnsRequest} from '../../store/columns/columnsAction';
 import {promiseListener, RootState} from '../../store/store';
 import {
   loginActionFailure,
@@ -20,68 +16,52 @@ import {
   regActionFailure,
   regActionSuccess,
 } from '../../store/user/userActions';
+import {LoginScreenSelector} from '../../store/user/userSelectors';
+import {UserSignUp} from '../../store/user/userTypes';
 import {styles} from './styles';
 
 export const Login: React.FC = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const {register, handleSubmit, setValue} = useForm();
   const [isSignInState, setIsSignInState] = useState(false);
-  const [waitingPopupState, setPopupState] = useState(false);
-  const user = useSelector((state: RootState) => state.user.id);
+
+  const {isLoading, userId} = useSelector((state: RootState) =>
+    LoginScreenSelector(state),
+  );
 
   const signIn = useCallback(
-    (formData: any) => {
+    (formData: UserSignUp) => {
       promiseListener
         .createAsyncFunction({
           start: loginActionRequest.type,
           resolve: loginActionSuccess.type,
           reject: loginActionFailure.type,
         })
-        .asyncFunction({
-          email: formData.email,
-          password: formData.password,
-        })
+        .asyncFunction(formData)
         .then(
           () => {
-            promiseListener
-              .createAsyncFunction({
-                start: getColumnsRequest.type,
-                resolve: getColumnsSuccess.type,
-                reject: getColumnsFailure.type,
-              })
-              .asyncFunction()
-              .then(
-                () => {
-                  navigation.navigate('MyDesc', {});
-                  setPopupState(false);
-                },
-                () => showError(),
-              );
+            dispatch(getColumnsRequest());
+            navigation.navigate('MyDesc', {});
           },
           () => showError(),
         );
     },
-    [navigation],
+    [dispatch, navigation],
   );
 
   const reg = useCallback(
-    (formData: any) => {
+    (formData: UserSignUp) => {
       promiseListener
         .createAsyncFunction({
           start: regAction.type,
           resolve: regActionSuccess.type,
           reject: regActionFailure.type,
         })
-        .asyncFunction({
-          email: formData.email,
-          name: formData.name,
-          password: formData.password,
-        })
+        .asyncFunction(formData)
         .then(
-          () => {
-            navigation.navigate('MyDesc', {});
-            setPopupState(false);
-          },
+          () => navigation.navigate('MyDesc', {}),
           () => showError(),
         );
     },
@@ -90,11 +70,9 @@ export const Login: React.FC = () => {
 
   function showError(): void {
     Alert.alert('Something went wrong!');
-    setPopupState(false);
   }
 
-  function onSubmit(formData: any): void {
-    setPopupState(true);
+  function onSubmit(formData: UserSignUp): void {
     if (isSignInState) {
       signIn(formData);
     } else {
@@ -103,9 +81,7 @@ export const Login: React.FC = () => {
   }
 
   const onChangeField = useCallback(
-    (name: string) => (text: string) => {
-      setValue(name, text);
-    },
+    (name: string) => (text: string) => setValue(name, text),
     [setValue],
   );
 
@@ -113,11 +89,11 @@ export const Login: React.FC = () => {
     register('email');
     register('password');
     register('name');
-    if (user !== -1) {
+    if (userId !== -1) {
       navigation.navigate('MyDesc', {});
     }
     return () => {};
-  }, [navigation, register, user]);
+  }, [navigation, register, userId]);
 
   return (
     <>
@@ -162,7 +138,7 @@ export const Login: React.FC = () => {
           title={isSignInState ? 'Sign-in' : 'Sign-up'}
         />
       </ScrollView>
-      <LoadingPopup state={waitingPopupState} />
+      <LoadingPopup state={isLoading} />
     </>
   );
 };

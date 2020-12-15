@@ -10,12 +10,14 @@ import {columnsReducer} from './columns/columnReducers';
 import createReduxPromiseListener from 'redux-promise-listener';
 import {cardsReducer} from './cards/cardsReducers';
 import {commentsReducer} from './comments/commentsReducers';
+import {isLoadingReducer} from './isloading/loadingRedusers';
 
 const reducers = combineReducers({
   user: userReducer,
   columns: columnsReducer,
   cards: cardsReducer,
   comments: commentsReducer,
+  isLoading: isLoadingReducer,
 });
 export type RootState = ReturnType<typeof reducers>;
 const persistedReducer = persistReducer(

@@ -1,16 +1,12 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {useDispatch} from 'react-redux';
 import {
-  deleteCommentFailure,
   deleteCommentRequest,
-  deleteCommentSuccess,
-  updateCommentFailure,
   updateCommentRequest,
-  updateCommentSuccess,
 } from '../../store/comments/commentsAction';
-import {promiseListener} from '../../store/store';
 import {styles} from './styles';
 
 interface Props {
@@ -21,44 +17,24 @@ interface Props {
 }
 
 export const CardComment: React.FC<Props> = ({id, title, content, created}) => {
+  const dispatch = useDispatch();
+
   const [cardInput, setCardInput] = useState(content);
   const [inputState, setInputState] = useState(false);
 
   const updateComment = useCallback(() => {
-    promiseListener
-      .createAsyncFunction({
-        start: updateCommentRequest.type,
-        resolve: updateCommentSuccess.type,
-        reject: updateCommentFailure.type,
-      })
-      .asyncFunction({
+    dispatch(
+      updateCommentRequest({
         id: id,
         body: cardInput,
         created: created,
-      })
-      .then(
-        () => {},
-        () => showError(),
-      );
-  }, [cardInput, created, id]);
+      }),
+    );
+  }, [cardInput, created, dispatch, id]);
 
   const deleteComment = useCallback(() => {
-    promiseListener
-      .createAsyncFunction({
-        start: deleteCommentRequest.type,
-        resolve: deleteCommentSuccess.type,
-        reject: deleteCommentFailure.type,
-      })
-      .asyncFunction(id)
-      .then(
-        () => {},
-        () => showError(),
-      );
-  }, [id]);
-
-  function showError(): void {
-    Alert.alert('Something went wrong!');
-  }
+    dispatch(deleteCommentRequest(id));
+  }, [dispatch, id]);
 
   function diffInTime(): string {
     const diffTime = Math.abs(Date.now() - Date.parse(created));

@@ -7,14 +7,12 @@ interface Props {
   text?: string;
 }
 
-export const LoadingPopup: React.FC<Props> = ({state, text}) => {
-  return (
-    <Modal animationType="slide" transparent={true} visible={state}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text>{text ? text : 'Waiting response...'}</Text>
-        </View>
+export const LoadingPopup: React.FC<Props> = ({state, text}) => (
+  <Modal animationType="fade" transparent={true} visible={state}>
+    <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+        <Text>{text ? text : 'Waiting response...'}</Text>
       </View>
-    </Modal>
-  );
-};
+    </View>
+  </Modal>
+);

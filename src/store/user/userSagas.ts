@@ -2,6 +2,7 @@ import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
 import {getColumnsSuccess} from '../columns/columnsAction';
+import {setIsLoading} from '../isloading/loadingActions';
 import {
   loginActionFailure,
   loginActionRequest,
@@ -22,28 +23,29 @@ export function* watchOnUserChange() {
 
 function* signInUser(payloadAction: PayloadAction<LoginActionRequestPd>) {
   try {
-    const {email, password} = payloadAction.payload;
+    yield put(setIsLoading(true));
     const json: LoginUserSuccessPd = yield API.signIn({
-      email: email,
-      password: password,
+      ...payloadAction.payload,
     });
     yield put(loginActionSuccess(json));
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
+  } finally {
+    yield put(setIsLoading(false));
   }
 }
 
 function* signUpUser(payloadAction: PayloadAction<RegActionPd>) {
   try {
-    const {email, password, name} = payloadAction.payload;
-    const json = yield API.signUp({
-      email: email,
-      name: name,
-      password: password,
+    yield put(setIsLoading(true));
+    const json: RegActionSuccessPd = yield API.signUp({
+      ...payloadAction.payload,
     });
-    yield put(regActionSuccess(json as RegActionSuccessPd));
+    yield put(regActionSuccess(json));
     yield put(getColumnsSuccess(json.columns));
   } catch (e) {
     yield put(regActionFailure(e.toString()));
+  } finally {
+    yield put(setIsLoading(false));
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import {AllBoards} from './screens/AllBoards/AllBoards';
+import {AllColumns} from './screens/AllColumns/AllColumns';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {ColumnComponent} from './screens/Board';
+import {ColumnComponent} from './screens/Column';
 import {Provider} from 'react-redux';
 import {persistor, store} from './store/store';
 import {Title} from './common-components/Title';
@@ -32,7 +32,7 @@ export const App: React.FC = () => (
             options={{
               headerShown: false,
             }}
-            component={AllBoards}
+            component={AllColumns}
           />
           <Stack.Screen
             name="TODO"
