@@ -1,6 +1,7 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, takeLatest} from 'redux-saga/effects';
 import {API} from '../Api';
+import {getColumnsSuccess} from '../columns/columnsAction';
 import {setIsLoading} from '../isloading/loadingActions';
 import {
   loginActionFailure,
@@ -37,12 +38,14 @@ function* signInUser(payloadAction: PayloadAction<LoginActionRequestPd>) {
 function* signUpUser(payloadAction: PayloadAction<RegActionPd>) {
   try {
     yield put(setIsLoading(true));
-    const json = yield API.signUp({
+    const json: RegActionSuccessPd = yield API.signUp({
       ...payloadAction.payload,
     });
-    yield put(regActionSuccess(json as RegActionSuccessPd));
+    yield put(regActionSuccess(json));
+    yield put(getColumnsSuccess(json.columns));
   } catch (e) {
     yield put(regActionFailure(e.toString()));
+  } finally {
     yield put(setIsLoading(false));
   }
 }

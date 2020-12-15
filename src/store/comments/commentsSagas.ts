@@ -31,13 +31,10 @@ export function* watchOnComments() {
 
 function* getComments() {
   try {
-    yield put(setIsLoading(true));
     const json: Comment[] = yield API.getComments();
     yield put(getCommentsSuccess(json));
   } catch (e) {
     yield put(getCommentsFailure(e.toString()));
-  } finally {
-    yield put(setIsLoading(false));
   }
 }
 

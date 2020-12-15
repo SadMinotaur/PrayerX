@@ -2,12 +2,12 @@ import React from 'react';
 import {Text, View} from 'react-native';
 import {styles} from './styles';
 
-interface BoardProps {
+interface Props {
   name: string;
-  onTap: () => void;
+  onTap?: () => void;
 }
 
-export const BoardName: React.FC<BoardProps> = ({name, onTap}) => (
+export const ColumnName: React.FC<Props> = ({name, onTap}) => (
   <View onTouchEndCapture={onTap} style={styles.boardBorder}>
     <Text style={styles.boardText}>{name}</Text>
   </View>

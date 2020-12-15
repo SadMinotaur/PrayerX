@@ -26,13 +26,10 @@ export function* watchOnColumns() {
 
 function* getColumns() {
   try {
-    yield put(setIsLoading(true));
     const json: Column[] = yield API.getColumns();
     yield put(getColumnsSuccess(json));
   } catch (e) {
     yield put(loginActionFailure(e.toString()));
-  } finally {
-    yield put(setIsLoading(false));
   }
 }
 

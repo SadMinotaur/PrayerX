@@ -4,7 +4,7 @@ import {Alert, ScrollView, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {ColumnModal} from '../../common-components/ColumnModal';
 import {Title} from '../../common-components/Title';
-import {BoardName} from '../../components/BoardName';
+import {ColumnName} from '../../components/ColumnName';
 import {PlusIcon} from '../../icons-components/PlusIcon';
 import {getCardsRequest} from '../../store/cards/cardsAction';
 import {
@@ -68,7 +68,7 @@ export const AllColumns: React.FC = () => {
         contentContainerStyle={styles.scrollView}
         style={styles.container}>
         {columns.map(({id, title}) => (
-          <BoardName key={id} onTap={() => getColumnCards(id)} name={title} />
+          <ColumnName key={id} onTap={() => getColumnCards(id)} name={title} />
         ))}
       </ScrollView>
       <ColumnModal

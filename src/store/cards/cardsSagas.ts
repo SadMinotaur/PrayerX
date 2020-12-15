@@ -33,15 +33,12 @@ export function* watchOnCards() {
 
 function* getAllCards() {
   try {
-    yield put(setIsLoading(true));
     const json: GetAllCardsDto[] = yield API.getCards();
     yield put(
       getCardsSuccess(json.map((v: GetAllCardsDto) => ({...v} as Card))),
     );
   } catch (e) {
     yield put(getCardsFailure(e.toString()));
-  } finally {
-    yield put(setIsLoading(false));
   }
 }
 
