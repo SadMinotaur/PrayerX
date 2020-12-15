@@ -1,19 +1,15 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {Alert, ScrollView, View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {ColumnModal} from '../../common-components/ColumnModal';
 import {Title} from '../../common-components/Title';
 import {ColumnName} from '../../components/ColumnName';
 import {PlusIcon} from '../../icons-components/PlusIcon';
 import {getCardsRequest} from '../../store/cards/cardsAction';
-import {
-  addColumnFailure,
-  addColumnRequest,
-  addColumnSuccess,
-} from '../../store/columns/columnsAction';
+import {addColumnRequest} from '../../store/columns/columnsAction';
 import {Column} from '../../store/columns/columnsTypes';
-import {promiseListener, RootState} from '../../store/store';
+import {RootState} from '../../store/store';
 import {styles} from './styles';
 
 export const AllColumns: React.FC = () => {
@@ -23,20 +19,13 @@ export const AllColumns: React.FC = () => {
   const columns: Column[] = useSelector((state: RootState) => state.columns);
   const [modalAddColState, setAddColModalState] = useState(false);
 
-  const addColumn = useCallback((nameInput: string, descInput: string) => {
-    setAddColModalState(false);
-    promiseListener
-      .createAsyncFunction({
-        start: addColumnRequest.type,
-        resolve: addColumnSuccess.type,
-        reject: addColumnFailure.type,
-      })
-      .asyncFunction({desc: descInput, name: nameInput})
-      .then(
-        () => {},
-        () => showError(),
-      );
-  }, []);
+  const addColumn = useCallback(
+    (nameInput: string, descInput: string) => {
+      setAddColModalState(false);
+      dispatch(addColumnRequest({desc: descInput, name: nameInput}));
+    },
+    [dispatch],
+  );
 
   const getColumnCards = useCallback(
     (id: number) => {
@@ -45,10 +34,6 @@ export const AllColumns: React.FC = () => {
     },
     [dispatch, navigation],
   );
-
-  function showError(): void {
-    Alert.alert('Something went wrong!');
-  }
 
   return (
     <>

@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
           resolve: loginActionSuccess.type,
           reject: loginActionFailure.type,
         })
-        .asyncFunction({...formData})
+        .asyncFunction(formData)
         .then(
           () => {
             dispatch(getColumnsRequest());
@@ -59,7 +59,7 @@ export const Login: React.FC = () => {
           resolve: regActionSuccess.type,
           reject: regActionFailure.type,
         })
-        .asyncFunction({...formData})
+        .asyncFunction(formData)
         .then(
           () => navigation.navigate('MyDesc', {}),
           () => showError(),
