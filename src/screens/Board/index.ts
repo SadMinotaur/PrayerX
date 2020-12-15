@@ -1,1 +1,0 @@
-export {ColumnComponent} from './Board';

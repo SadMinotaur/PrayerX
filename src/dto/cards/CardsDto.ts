@@ -5,6 +5,13 @@ export type PostCardDto = {
   column: number;
 };
 
+export type PostCardDtoBody = {
+  title: string;
+  description: string;
+  checked: boolean;
+  column: {};
+};
+
 export type PostCardDtoResp = {
   title: string;
   description: string;

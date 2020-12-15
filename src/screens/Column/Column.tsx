@@ -2,20 +2,15 @@ import React, {useCallback, useState} from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Subscribed} from './Subscribed';
 import {MyPrayers} from './MyPrayers';
-import {Alert, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import {styles} from './styles';
 import {Title} from '../../common-components/Title';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRoute} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
-import {promiseListener, RootState} from '../../store/store';
-import {LoadingPopup} from '../../common-components/LoadingPopup';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../store/store';
 import {ColumnModal} from '../../common-components/ColumnModal';
-import {
-  updateColumnFailure,
-  updateColumnRequest,
-  updateColumnSuccess,
-} from '../../store/columns/columnsAction';
+import {updateColumnRequest} from '../../store/columns/columnsAction';
 import {CurrentColumnSelector} from '../../store/columns/columnSelectors';
 import {SettingsIcon} from '../../icons-components/SettingsIcon';
 
@@ -23,44 +18,30 @@ interface RouteProps {
   id: number;
 }
 
-const Tab = createMaterialTopTabNavigator();
-
 export const ColumnComponent: React.FC = () => {
+  const Tab = createMaterialTopTabNavigator();
   const route = useRoute();
+  const dispatch = useDispatch();
+
   const {column} = useSelector((state: RootState) =>
     CurrentColumnSelector(state, {id: (route.params as RouteProps).id}),
   );
 
   const [settingsModalState, setSettingsModalState] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const changeColumn = useCallback(
     (nameInput: string, descInput: string) => {
       setSettingsModalState(false);
-      setIsLoading(true);
-      promiseListener
-        .createAsyncFunction({
-          start: updateColumnRequest.type,
-          resolve: updateColumnSuccess.type,
-          reject: updateColumnFailure.type,
-        })
-        .asyncFunction({
+      dispatch(
+        updateColumnRequest({
           id: column.id,
           title: nameInput,
           description: descInput,
-        })
-        .then(
-          () => setIsLoading(false),
-          () => showError(),
-        );
+        }),
+      );
     },
-    [column.id],
+    [column.id, dispatch],
   );
-
-  function showError(): void {
-    Alert.alert('Something went wrong!');
-    setIsLoading(false);
-  }
 
   // Works only this way
   const MyPrayersScreen = () => MyPrayers({idColumn: column.id});
@@ -111,7 +92,6 @@ export const ColumnComponent: React.FC = () => {
         onClose={() => setSettingsModalState(false)}
         onSubmit={changeColumn}
       />
-      <LoadingPopup state={isLoading} />
     </>
   );
 };

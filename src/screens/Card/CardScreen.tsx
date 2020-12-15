@@ -28,6 +28,7 @@ export const CardScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const id = (route.params as RouteProps).id;
+
   const {comments, user} = useSelector((state: RootState) =>
     CardSelector(state, {id: id}),
   );

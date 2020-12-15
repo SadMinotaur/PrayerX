@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
+import {PostRequestDto, UpdateRequestDto} from '../dto/ApiTypes';
 import {
   AuthSignUpReqDto,
   AuthSignUpSuccessDto,
@@ -32,7 +33,6 @@ class Api {
     this.urlBase = baseUrl;
     AsyncStorage.getItem('token').then((v) => {
       if (v !== null) {
-        console.log(v);
         this.token = v;
       }
     });
@@ -50,7 +50,7 @@ class Api {
     }
   }
 
-  private postRequest(url: string, body: any): Promise<any> {
+  private postRequest(url: string, body: PostRequestDto) {
     return fetch(this.urlBase + url, {
       method: 'POST',
       headers: {
@@ -67,7 +67,7 @@ class Api {
       });
   }
 
-  private getRequest(url: string): Promise<any> {
+  private getRequest(url: string) {
     return fetch(this.urlBase + url, {
       method: 'GET',
       headers: {
@@ -82,7 +82,7 @@ class Api {
       });
   }
 
-  private deleteRequest(url: string): Promise<any> {
+  private deleteRequest(url: string) {
     return fetch(this.urlBase + url, {
       method: 'DELETE',
       headers: {
@@ -97,7 +97,7 @@ class Api {
       });
   }
 
-  private updateRequest(url: string, body: any): Promise<any> {
+  private updateRequest(url: string, body: UpdateRequestDto) {
     return fetch(this.urlBase + url, {
       method: 'PUT',
       headers: {
@@ -177,9 +177,7 @@ class Api {
 
   public async updateCard(card: Card): Promise<PostCardDtoResp> {
     return this.updateRequest('cards/' + card.id, {
-      title: card.title,
-      description: card.description,
-      checked: card.checked,
+      ...card,
       column: {},
     });
   }
@@ -203,10 +201,7 @@ class Api {
     id: number,
     comment: CreateCommentDto,
   ): Promise<Comment> {
-    return this.updateRequest('comments/' + id, {
-      body: comment.body,
-      created: comment.created,
-    });
+    return this.updateRequest('comments/' + id, comment);
   }
 }
 

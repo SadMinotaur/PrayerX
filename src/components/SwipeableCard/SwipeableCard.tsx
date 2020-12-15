@@ -5,88 +5,51 @@ import {styles} from './styles';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import CheckBox from '@react-native-community/checkbox';
 import {Card} from '../../store/cards/cardsTypes';
-import {promiseListener} from '../../store/store';
 import {
-  deleteCardsFailure,
   deleteCardsRequest,
-  deleteCardsSuccess,
-  updateCardsFailure,
   updateCardsRequest,
-  updateCardsSuccess,
 } from '../../store/cards/cardsAction';
 import {useNavigation} from '@react-navigation/native';
 import {HumanIcon} from '../../icons-components/HumanIcon';
 import {HandsIcon} from '../../icons-components/HandsIcon';
 import {LeftLine} from '../../icons-components/LeftLine';
-import {
-  getCommentsFailure,
-  getCommentsRequest,
-  getCommentsSuccess,
-} from '../../store/comments/commentsAction';
+import {getCommentsRequest} from '../../store/comments/commentsAction';
 import {TextInput} from 'react-native-gesture-handler';
+import {useDispatch} from 'react-redux';
 
 interface Props {
   card: Card;
-  showError: () => void;
 }
 
-export const SwipeableCard: React.FC<Props> = ({card, showError}) => {
+export const SwipeableCard: React.FC<Props> = ({card}) => {
   const {id, title, checked} = card;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [inputState, setInputState] = useState(false);
   const [updateInput, setUpdateInput] = useState(title);
 
   const deleteCard = useCallback(() => {
-    promiseListener
-      .createAsyncFunction({
-        start: deleteCardsRequest.type,
-        resolve: deleteCardsSuccess.type,
-        reject: deleteCardsFailure.type,
-      })
-      .asyncFunction(id)
-      .then(
-        () => {},
-        () => showError(),
-      );
-  }, [id, showError]);
+    dispatch(deleteCardsRequest(id));
+  }, [dispatch, id]);
 
   const updateCard = useCallback(
     (bool: boolean) => {
-      promiseListener
-        .createAsyncFunction({
-          start: updateCardsRequest.type,
-          resolve: updateCardsSuccess.type,
-          reject: updateCardsFailure.type,
-        })
-        .asyncFunction({
+      dispatch(
+        updateCardsRequest({
           ...card,
           title: updateInput,
           checked: bool,
-        } as Card)
-        .then(
-          () => {},
-          () => showError(),
-        );
+        } as Card),
+      );
     },
-    [card, showError, updateInput],
+    [card, dispatch, updateInput],
   );
 
   const onCardTap = useCallback(() => {
-    promiseListener
-      .createAsyncFunction({
-        start: getCommentsRequest.type,
-        resolve: getCommentsSuccess.type,
-        reject: getCommentsFailure.type,
-      })
-      .asyncFunction()
-      .then(
-        () => {
-          navigation.navigate('Card', {id: id});
-        },
-        () => showError(),
-      );
-  }, [id, navigation, showError]);
+    dispatch(getCommentsRequest());
+    navigation.navigate('Card', {id: id});
+  }, [dispatch, id, navigation]);
 
   return (
     <Swipeable
